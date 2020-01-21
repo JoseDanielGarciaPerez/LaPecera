@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -27,16 +28,16 @@ public class PantallaJuego implements Pantalla {
 		this.juego=juego;
 		
 		try {
-			fondo = ImageIO.read(new File("Imagenes/fondo.jpg"));
-			imagenGalleta = ImageIO.read(new File("Imagenes/Galleta.jpg"));
+			fondo = ImageIO.read(new File("./Imagenes/fondo.jpg"));
+			imagenGalleta = ImageIO.read(new File("Imagenes/galleta.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		galleta = new Sprite(juego.getWidth()/2,juego.getHeight()/2,100,100,0,0,imagenGalleta,true, 0);
-		System.out.println(this.juego.getWidth());
-//		fondoEscalado = fondo.getScaledInstance(this.juego.getWidth(), this.juego.getHeight(), BufferedImage.SCALE_SMOOTH);
+		galleta = new Sprite(juego.getWidth()/4+100,juego.getWidth()/4-30,200,200,0,0,imagenGalleta,true,1);
+		
+		fondoEscalado = fondo.getScaledInstance(this.juego.getWidth(), this.juego.getHeight(), BufferedImage.SCALE_SMOOTH);
 
 	}
 

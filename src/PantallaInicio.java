@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -16,7 +17,8 @@ public class PantallaInicio implements Pantalla {
 
 	@Override
 	public void pintarPantalla(Graphics g) {
-		// TODO Auto-generated method stub
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, juego.getWidth(),juego.getHeight());
 
 	}
 
@@ -28,7 +30,9 @@ public class PantallaInicio implements Pantalla {
 
 	@Override
 	public void pulsarRaton(MouseEvent e) {
-		// TODO Auto-generated method stub
+		if(e.getButton()==MouseEvent.BUTTON1) {
+			juego.pantallaEjecucion = new PantallaJuego(juego);
+		}
 
 	}
 
