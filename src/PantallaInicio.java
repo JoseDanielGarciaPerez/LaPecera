@@ -6,11 +6,11 @@ public class PantallaInicio implements Pantalla {
 
 	PanelJuego juego;
 	public PantallaInicio(PanelJuego juego) {
-		this.juego=juego;
+		inicializarPantalla(juego);
 	}
 	@Override
 	public void inicializarPantalla(PanelJuego juego) {
-		// TODO Auto-generated method stub
+		this.juego=juego;
 
 	}
 

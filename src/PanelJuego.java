@@ -26,7 +26,7 @@ public class PanelJuego extends JPanel implements Runnable {
 	public PanelJuego() {
 
 		// Al comienzo del juego queremos que se muestre la pantalla de inicio
-		pantallaEjecucion = new PantallaInicio(this);
+		pantallaEjecucion = new PantallaJuego(this);
 
 		// HILO
 
