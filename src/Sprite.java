@@ -26,6 +26,10 @@ public class Sprite {
 	protected BufferedImage buffer;
 	protected String texto;
 	protected int colisionado;
+	
+	protected final int MOVERSE = 8;
+	
+	protected boolean comida=false;
 
 	/**
 	 * Constructor privado para evitar repetición de código en los otros
@@ -178,10 +182,90 @@ public class Sprite {
 	 * Actualiza la posición teniendo en cuenta la velocidad. No tiene en cuenta
 	 * márgenes de pantalla.
 	 */
-	public void aplicarVelocidad() {
-		posX += velX;
-		posY += velY;
+	public void aplicarVelocidad(PanelJuego juego) {
+		if(posY<juego.getHeight()-8)
+			posY = posY + velY;
+			
+			
+	}
+	
+	
+	public void movimientoPez(PanelJuego panelJuego) {
+		if(comida==false) {
+		int valor = (int)(Math.random()*(1-500)+500);
+		
+		if(valor == MOVERSE) {
+			
+			int direccionX = (int)(Math.random()*(0-2)+2);
+			int direccionY = (int)(Math.random()*(0-2)+2);
+//			System.out.println(direccionX);
+//			System.out.println(direccionY);
+			
+			if(direccionX == 0) {
+				for (int i = 0; i < 5; i++) {
+					
+				
+				
+				if (posX + ancho >= panelJuego.getWidth()) { // Si te vas por la derecha!
+					velX = -Math.abs(velX);
+				}
+				if (posX < 0) {
+					velX = Math.abs(velX);
+				}
 
+				posX = posX + velX;
+				}
+			}else {
+				for (int i = 0; i < 5; i++) {
+				
+				if (posX + ancho >= panelJuego.getWidth()) { // Si te vas por la derecha!
+					velX = -Math.abs(velX);
+				}
+				if (posX < 0) {
+					velX = Math.abs(velX);
+				}
+
+				
+
+				posX = posX - velX;
+				}
+			}
+			
+			if(direccionY == 0) {
+				for (int i = 0; i < 5; i++) {
+				// Eje vertical:
+				if (posY + alto >= panelJuego.getHeight()) { // Si te vas por abajo!!
+					velY = -Math.abs(velY);
+				}
+				if (posY < 0) {
+					velY = Math.abs(velY);
+					
+					
+					
+					
+				}
+				posY = posY + velY;
+				}
+				
+			}else {
+				// Eje vertical:
+				for (int i = 0; i < 5; i++) {
+				if (posY + alto >= panelJuego.getHeight()) { // Si te vas por abajo!!
+					velY = Math.abs(velY);
+				}
+				if (posY < 0) {
+					velY = -Math.abs(velY);
+					
+					
+					
+				}
+				posY = posY - velY;
+				}
+			}
+			
+		
+		}
+		}
 	}
 
 	/** GETTERS && SETTERS **/
