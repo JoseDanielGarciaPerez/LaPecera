@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 
 public class PantallaJuego implements Pantalla {
 
@@ -23,8 +24,9 @@ public class PantallaJuego implements Pantalla {
 	private Sprite comida, cerrar;
 	private boolean darComida = false;
 	private boolean enBoton = false;
-
+	
 	public PantallaJuego(PanelJuego juego) {
+		
 		inicializarPantalla(juego);
 	}
 
@@ -123,6 +125,11 @@ public class PantallaJuego implements Pantalla {
 		} else if (comida.enBoton && darComida == false) {
 			darComida = true;
 		}
+		
+		if(cerrar.enBoton) {
+			System.exit(0);
+		}
+		
 
 	}
 

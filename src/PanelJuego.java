@@ -10,6 +10,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class PanelJuego extends JPanel implements Runnable {
@@ -21,10 +22,12 @@ public class PanelJuego extends JPanel implements Runnable {
 	// Objeto de la interface Pantalla que será el objeto que estará cargado en
 	// memoria y será la pantalla que se mostrará
 	Pantalla pantallaEjecucion;
+	
+	
 
 	// En el contructor vamos a colocar lo necesario para que funcione el juego
 	public PanelJuego() {
-
+		
 		// Al comienzo del juego queremos que se muestre la pantalla de inicio
 		pantallaEjecucion = new PantallaInicio(this);
 
