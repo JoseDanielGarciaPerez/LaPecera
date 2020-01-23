@@ -98,8 +98,7 @@ public class Pez {
 				
 			}
 			if(posY>direccionY) {
-				System.out.println("PosY: "+posY);
-				System.out.println("DireccionY: "+direccionY);
+				
 				posY -=velY;
 			}
 			if(posY<direccionY) {

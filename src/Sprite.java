@@ -26,7 +26,7 @@ public class Sprite {
 	protected BufferedImage buffer;
 	protected String texto;
 	protected int colisionado;
-	
+	protected boolean enBoton = false;
 	protected final int MOVERSE = 8;
 	
 	protected boolean comida=false;
