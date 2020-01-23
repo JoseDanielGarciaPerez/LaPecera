@@ -72,9 +72,9 @@ public class Pez {
 			if(movimiento==false) {
 				movimiento=true;
 				
-			direccionX = (int) (Math.random() * (1 - panelJuego.getWidth()-this.ancho) + panelJuego.getWidth()-this.ancho);
+			direccionX = (int) (Math.random() * ((panelJuego.getWidth()-this.ancho)+1));
 			
-			direccionY = (int) (Math.random() * (1 - panelJuego.getHeight()-this.alto) + panelJuego.getHeight()-this.alto);
+			direccionY = (int) (Math.random() * ((panelJuego.getHeight()-this.alto)+1));
 			
 			}
 			
@@ -98,6 +98,8 @@ public class Pez {
 				
 			}
 			if(posY>direccionY) {
+				System.out.println("PosY: "+posY);
+				System.out.println("DireccionY: "+direccionY);
 				posY -=velY;
 			}
 			if(posY<direccionY) {
