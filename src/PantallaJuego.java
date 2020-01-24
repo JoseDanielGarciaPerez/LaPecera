@@ -34,7 +34,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 	private boolean mostrarDatos=false;
 	int valorX,valorY;
 	private VentanaPrincipal ventana;
-	private boolean partidaInicida = false;
+	private boolean partidaInicida;
 	private double tiempoInicial = 0;
 	private double contadorTiempo = 0;
 	String cadena = "";
@@ -51,6 +51,8 @@ public class PantallaJuego implements Pantalla, Serializable {
 
 	@Override
 	public void inicializarPantalla(PanelJuego juego) {
+		Partida partida = Datos.cargarDatos();
+		
 		tiempoInicial = System.nanoTime();
 		this.juego = juego;
 
@@ -87,6 +89,17 @@ public class PantallaJuego implements Pantalla, Serializable {
 
 		cerrarVentana= new Sprite(700, 420, 50, 50, 0, 0, imagenDone, true, 0);
 		
+		if(partida==null) {
+			partidaInicida=false;
+		}else {
+			partidaInicida=true;
+			
+			for (int i = 0; i < partida.getPeces(); i++) {
+				peces.add(new Pez(juego.getWidth() / 4 + 100, juego.getWidth() / 4 - 30, 100, 100, 1, 1, imagenPezIzquierda,
+						true,partida.getNombres().get(i)));
+				peces.get(i).añadirImagenes(imagenPezDerecha, imagenPezIzquierda);
+			}
+		}
 		
 	}
 
@@ -195,6 +208,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 		}
 		
 		if(cerrar.enBoton) {
+			guardarPartida();
 			System.exit(0);
 		}
 		}else {
@@ -330,6 +344,17 @@ public class PantallaJuego implements Pantalla, Serializable {
 		
 		
 	}
+	
+	public void guardarPartida() {
+		Partida partida = new Partida();
+		
+		partida.setPeces(peces.size());
+		for (int i = 0; i < peces.size(); i++) {
+			partida.setNombres(peces.get(i).nombre);
+		}
+		Datos.guardarDatos(partida);
+	}
+	
 	
 
 }

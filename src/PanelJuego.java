@@ -105,7 +105,7 @@ public class PanelJuego extends JPanel implements Runnable {
 			// hacemos repaint
 			repaint();
 
-			Toolkit.getDefaultToolkit().sync();
+			
 			// llamamos al metodo ejecutar frame de la pantalla en ejecución
 			pantallaEjecucion.ejecutarFrame();
 

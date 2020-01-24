@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.imageio.ImageIO;
 
@@ -16,7 +17,7 @@ import javax.imageio.ImageIO;
  * @author jesusredondogarcia
  *
  */
-public class Sprite {
+public class Sprite implements Serializable {
 	protected int posX;
 	protected int posY;
 	protected int ancho;

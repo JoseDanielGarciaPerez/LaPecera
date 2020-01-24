@@ -2,8 +2,13 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
-public class Pez {
+public class Pez implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	String nombre;
 	int salud;
 	protected int posX;
