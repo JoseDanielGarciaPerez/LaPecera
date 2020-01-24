@@ -182,12 +182,23 @@ public class Sprite {
 	 * Actualiza la posición teniendo en cuenta la velocidad. No tiene en cuenta
 	 * márgenes de pantalla.
 	 */
-	public void aplicarVelocidad(PanelJuego juego) {
+	public void aplicarVelocidadComida(PanelJuego juego) {
 		if(posY<juego.getHeight()-8)
 			posY = posY + velY;
 			
 			
 	}
+	
+	public void aplicarVelocidadBrbuja(PanelJuego juego) {
+		
+			posY = posY - velY;
+		
+		
+			
+			
+			
+	}
+	
 	
 	
 	public void movimientoPez(PanelJuego panelJuego) {

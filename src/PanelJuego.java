@@ -22,14 +22,14 @@ public class PanelJuego extends JPanel implements Runnable {
 	// Objeto de la interface Pantalla que será el objeto que estará cargado en
 	// memoria y será la pantalla que se mostrará
 	Pantalla pantallaEjecucion;
-	
+	VentanaPrincipal ventana;
 	
 
 	// En el contructor vamos a colocar lo necesario para que funcione el juego
-	public PanelJuego() {
-		
+	public PanelJuego(VentanaPrincipal ventana) {
+	this.ventana=ventana;
 		// Al comienzo del juego queremos que se muestre la pantalla de inicio
-		pantallaEjecucion = new PantallaInicio(this);
+		pantallaEjecucion = new PantallaInicio(this,ventana);
 
 		// HILO
 
@@ -66,7 +66,8 @@ public class PanelJuego extends JPanel implements Runnable {
 
 			// si se arrastrase el ratón se llamaría al metodo mouseMoved
 			public void mouseDragged(MouseEvent e) {
-				mouseMoved(e);
+				pantallaEjecucion.arrastrarRaton(e);
+			
 			}
 		});
 		// listener para saber que teclas se pulsan por pantalla

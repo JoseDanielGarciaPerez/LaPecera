@@ -14,13 +14,16 @@ public class VentanaPrincipal {
 	// Sigo teniendo la ventana
 	JFrame ventana;
 	PanelJuego panelJuego;
-
+	private final int ANCHO = 800;
+	private final int ALTO = 500;
 	public VentanaPrincipal() {
 		ventana = new JFrame();
-		ventana.setBounds(300, 200, 800, 550);
+		ventana.setBounds(300, 200, ANCHO, ALTO);
 		ventana.setResizable(false);
 		ventana.setUndecorated(true);
 		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		
 	}
 
 	/**
@@ -31,7 +34,7 @@ public class VentanaPrincipal {
 		ventana.setLayout(new GridLayout(1, 1));
 
 		// PANEL JUEGO
-		panelJuego = new PanelJuego();
+		panelJuego = new PanelJuego(this);
 		ventana.add(panelJuego);
 	}
 
@@ -50,5 +53,9 @@ public class VentanaPrincipal {
 		ventana.setVisible(true);
 		inicializarComponentes();
 		inicializarListeners();
+	}
+	
+	public void moverVentana(int x, int y) {
+		ventana.setBounds(x, y, ANCHO, ALTO);
 	}
 }

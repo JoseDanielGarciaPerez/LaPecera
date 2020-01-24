@@ -19,7 +19,9 @@ public interface Pantalla {
 	public void pulsarRaton(MouseEvent e);
 
 	public void moverRaton(MouseEvent e);
-
+	
+	public void arrastrarRaton(MouseEvent e);
+	
 	public void redimensionar();
 
 	public void pulsarTecla(KeyEvent tecla);

@@ -8,9 +8,9 @@ import javax.swing.JFrame;
 public class PantallaInicio implements Pantalla {
 
 	PanelJuego juego;
-	
-	public PantallaInicio(PanelJuego juego) {
-		
+	VentanaPrincipal ventana;
+	public PantallaInicio(PanelJuego juego,VentanaPrincipal ventana) {
+		this.ventana=ventana;
 		inicializarPantalla(juego);
 	}
 	@Override
@@ -35,7 +35,7 @@ public class PantallaInicio implements Pantalla {
 	@Override
 	public void pulsarRaton(MouseEvent e) {
 		if(e.getButton()==MouseEvent.BUTTON1) {
-			juego.pantallaEjecucion = new PantallaJuego(juego);
+			juego.pantallaEjecucion = new PantallaJuego(juego,ventana);
 		}
 
 	}
@@ -56,6 +56,11 @@ public class PantallaInicio implements Pantalla {
 	public void pulsarTecla(KeyEvent tecla) {
 		// TODO Auto-generated method stub
 
+	}
+	@Override
+	public void arrastrarRaton(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -4,7 +4,8 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 public class Pez {
-
+	String nombre;
+	int salud;
 	protected int posX;
 	protected int posY;
 	protected int ancho;
@@ -19,30 +20,28 @@ public class Pez {
 	protected boolean comida = false;
 	
 	protected boolean movimiento = false;
-	
+	protected boolean focuseado = false;
 	Image imagenDerecha;
 	Image imagenIzquierda;
 	
 	boolean usadoDerecha=false;
 	boolean usadoIzquierda=false;
 
-	private Pez(int posX, int posY, int ancho, int alto, int velX, int velY) {
+	private Pez(int posX, int posY, int ancho, int alto, int velX, int velY,String nombre) {
 		this.posX = posX;
 		this.posY = posY;
 		this.ancho = ancho;
 		this.alto = alto;
 		this.velX = velX;
 		this.velY = velY;
+		this.nombre=nombre;
 	}
 
-	public Pez(int posX, int posY, int ancho, int alto, int velX, int velY, Color color) {
-		this(posX, posY, ancho, alto, velX, velY);
-		pintarBuffer(color);
-	}
+	
 	
 	public Pez(int posX, int posY, int ancho, int alto, int velX, int velY, Image imgConstructor,
-			boolean redimensionar) {
-		this(posX, posY, ancho, alto, velX, velY);
+			boolean redimensionar,String nombre) {
+		this(posX, posY, ancho, alto, velX, velY,nombre);
 	
 		pintarBuffer(imgConstructor, redimensionar);
 	}
