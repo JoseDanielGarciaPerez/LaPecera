@@ -28,20 +28,23 @@ public class PantallaJuego implements Pantalla, Serializable {
 	private ArrayList<Sprite> comidas = new ArrayList<Sprite>();
 	private ArrayList<Sprite> burbujas = new ArrayList<Sprite>();
 	private BufferedImage imagenGalleta, imagenPezIzquierda, imagenPezDerecha, imagenComida, imagenCerrar,
-			imagenBurbuja, imagenConcha, imagenBienvenida, imagenDone, imagenTexto, imagenMuerto,imagenTienda;
-	private Sprite comida, cerrar, agarrar, bienvenida, cerrarVentana, texto,tienda,dinero;
+			imagenBurbuja, imagenConcha, imagenBienvenida, imagenDone, imagenTexto, imagenMuerto,imagenTienda,imagenNuevoPayaso,imagenNuevoTortuga,imagenNuevoTiburon,imagenTortugaIzquierda,imagenTortugaDerecha,
+			imagenTiburonIzquierda,imagenTiburonDerecha,imagenTortugaMuerta,imagenTiburonMuerto;
+	private Sprite comida, cerrar, agarrar, bienvenida, cerrarVentana, texto,tienda,dinero,nuevoPayaso,nuevoTortuga,nuevoTiburon;
 	private boolean darComida = false;
 	private boolean escribiendo = false;
 	
 	int valorX, valorY;
 	private VentanaPrincipal ventana;
-	private boolean partidaInicida;
+	 boolean partidaInicida;
+	 boolean nuevoPez ;
+	 int tipoPez =0;
 	private double tiempoInicial = 0;
 	private double contadorTiempo = 0;
 	String cadena = "";
 	final Font fuenteNombre = new Font("", Font.BOLD, 60);
 	final Font fuentePeces = new Font("", Font.BOLD, 18);
-
+	Partida partida;
 	public PantallaJuego(PanelJuego juego, VentanaPrincipal ventana) {
 		this.ventana = ventana;
 		inicializarPantalla(juego);
@@ -49,7 +52,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 
 	@Override
 	public void inicializarPantalla(PanelJuego juego) {
-		Partida partida = Datos.cargarDatos();
+		partida = Datos.cargarDatos();
 
 		tiempoInicial = System.nanoTime();
 		this.juego = juego;
@@ -68,6 +71,15 @@ public class PantallaJuego implements Pantalla, Serializable {
 			imagenTexto = ImageIO.read(new File("Imagenes/texto.png"));
 			imagenMuerto = ImageIO.read(new File("Imagenes/pez-abajo.png"));
 			imagenTienda = ImageIO.read(new File("Imagenes/tienda.png"));
+			imagenNuevoPayaso = ImageIO.read(new File("Imagenes/nuevoPayaso.png"));
+			imagenNuevoTortuga = ImageIO.read(new File("Imagenes/nuevoTortuga.png"));
+			imagenNuevoTiburon = ImageIO.read(new File("Imagenes/nuevoTiburon.png"));
+			imagenTortugaIzquierda = ImageIO.read(new File("Imagenes/tortuga-izquierda.png"));
+			imagenTortugaDerecha = ImageIO.read(new File("Imagenes/tortuga-derecha.png"));
+			imagenTortugaMuerta = ImageIO.read(new File("Imagenes/tortuga-abajo.png"));
+			imagenTiburonDerecha = ImageIO.read(new File("Imagenes/tiburon-derecha.png"));
+			imagenTiburonIzquierda = ImageIO.read(new File("Imagenes/tiburon-izquierda.png"));
+			imagenTiburonMuerto = ImageIO.read(new File("Imagenes/tiburon-abajo.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -89,17 +101,39 @@ public class PantallaJuego implements Pantalla, Serializable {
 				BufferedImage.SCALE_SMOOTH);
 
 		cerrarVentana = new Sprite(700, 420, 50, 50, 0, 0, imagenDone, true, 0);
+		
+		nuevoPayaso= new Sprite(0, 0, 800, 500, 0, 0, imagenNuevoPayaso, true, 0);
+		
+		nuevoTortuga= new Sprite(0, 0, 800, 500, 0, 0, imagenNuevoTortuga, true, 0);
+		nuevoTiburon= new Sprite(0, 0, 800, 500, 0, 0, imagenNuevoTiburon, true, 0);
 
 		if (partida == null) {
-			partidaInicida = false;
+			nuevoPez=true;
 		} else {
-			partidaInicida = true;
+			nuevoPez= false;
 
 			for (int i = 0; i < partida.getPeces(); i++) {
+				switch(partida.getTipos().get(i)) {
+				case 1:
 				peces.add(new Pez(juego.getWidth() / 4 + 100, juego.getWidth() / 4 - 30, 100, 100, 1, 1,
-						imagenPezIzquierda, true, partida.getNombres().get(i)));
+						imagenPezIzquierda, true, partida.getNombres().get(i),partida.getEstadisticas().get(i),partida.getTipos().get(i)));
 				peces.get(i).añadirImagenes(imagenPezDerecha, imagenPezIzquierda, imagenMuerto);
+				break;
+				
+				case 2:
+					
+					peces.add(new Pez(juego.getWidth() / 4 + 100, juego.getWidth() / 4 - 30, 100, 100, 1, 1,
+							imagenTortugaIzquierda, true, partida.getNombres().get(i),partida.getEstadisticas().get(i),partida.getTipos().get(i)));
+					peces.get(i).añadirImagenes(imagenTortugaDerecha, imagenTortugaIzquierda, imagenTortugaMuerta);
+					break;
+				case 3:
+					peces.add(new Pez(juego.getWidth() / 4 + 100, juego.getWidth() / 4 - 30, 200, 100, 1, 1,
+							imagenTiburonIzquierda, true, partida.getNombres().get(i),partida.getEstadisticas().get(i),partida.getTipos().get(i)));
+					peces.get(i).añadirImagenes(imagenTiburonDerecha, imagenTiburonIzquierda, imagenTiburonMuerto);
+					break;
+				}
 			}
+				
 		}
 
 	}
@@ -107,7 +141,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 	@Override
 	public void pintarPantalla(Graphics g) {
 		rellenarFondo(g);
-		if (partidaInicida) {
+		if (nuevoPez ==false) {
 			for (int i = 0; i < peces.size(); i++) {
 
 				peces.get(i).pintarEnMundo(g);
@@ -133,19 +167,14 @@ public class PantallaJuego implements Pantalla, Serializable {
 			burbujas.get(i).pintarEnMundo(g);
 		}
 
-		if (partidaInicida == false) {
-
-			bienvenida.pintarEnMundo(g);
-			cerrarVentana.pintarEnMundo(g);
-			cerrarVentana.pintarBuffer(imagenDone, true);
-			texto.pintarEnMundo(g);
-			texto.pintarBuffer(imagenTexto, true);
-			if (escribiendo) {
-				pintarNombre(g);
-			}
+		if (nuevoPez) {
+			creadorDePez(tipoPez, g);
 		}
+		}
+		
+	
 
-	}
+	
 
 	@Override
 	public void ejecutarFrame() {
@@ -163,7 +192,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 			}
 		} else {
 			for (int i = 0; i < peces.size(); i++) {
-
+				
 				peces.get(i).buscarComida(comidas.get(comidas.size() - 1));
 				if (peces.get(i).colisiona(comidas.get(comidas.size() - 1))) {
 					if (peces.get(i).salud <= 10)
@@ -173,6 +202,8 @@ public class PantallaJuego implements Pantalla, Serializable {
 						break;
 				}
 			}
+				
+			
 		}
 
 		if (comidas.size() > 0) {
@@ -191,7 +222,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 
 	@Override
 	public void pulsarRaton(MouseEvent e) {
-		if (partidaInicida) {
+		if (nuevoPez==false) {
 			if (darComida == true && comida.enBoton == false) {
 				comidas.add(new Sprite(e.getX(), e.getY(), 10, 10, 0, 1, imagenGalleta, true, 0));
 			} else {
@@ -216,11 +247,12 @@ public class PantallaJuego implements Pantalla, Serializable {
 				crearPez();
 				cadena = "";
 				bienvenida = null;
-				partidaInicida = true;
+				nuevoPez = false;
 
 			}
 
 			if (texto.enBoton) {
+				
 				if (escribiendo) {
 					escribiendo = false;
 				} else {
@@ -325,12 +357,31 @@ public class PantallaJuego implements Pantalla, Serializable {
 	}
 
 	public void crearPez() {
-
-		Pez pez = new Pez(juego.getWidth() / 4 + 100, juego.getWidth() / 4 - 30, 100, 100, 1, 1, imagenPezIzquierda,
-				true, cadena);
-		pez.añadirImagenes(imagenPezDerecha, imagenPezIzquierda, imagenMuerto);
-		peces.add(pez);
-
+		Pez pez;
+		switch(tipoPez) {
+		case 0:
+		
+		
+		case 1:
+			
+			pez = new Pez(juego.getWidth() / 4 + 100, juego.getWidth() / 4 - 30, 100, 100, 1, 1, imagenPezIzquierda,
+					true, cadena,10,1);
+			pez.añadirImagenes(imagenPezDerecha, imagenPezIzquierda, imagenMuerto);
+			peces.add(pez);
+			break;
+		case 2:
+			pez = new Pez(juego.getWidth() / 4 + 100, juego.getWidth() / 4 - 30, 100, 100, 1, 1, imagenTortugaIzquierda,
+					true, cadena,12,2);
+			pez.añadirImagenes(imagenTortugaDerecha, imagenTortugaIzquierda, imagenTortugaMuerta);
+			peces.add(pez);
+			break;
+			
+		case 3:
+			pez = new Pez(juego.getWidth() / 4 + 100, juego.getWidth() / 4 - 30, 200, 100, 1, 1, imagenTiburonIzquierda,
+					true, cadena,8,3);
+			pez.añadirImagenes(imagenTiburonDerecha, imagenTiburonIzquierda, imagenTiburonMuerto);
+			peces.add(pez);
+		}
 	}
 
 	public void guardarPartida() {
@@ -339,8 +390,58 @@ public class PantallaJuego implements Pantalla, Serializable {
 		partida.setPeces(peces.size());
 		for (int i = 0; i < peces.size(); i++) {
 			partida.setNombres(peces.get(i).nombre);
+			partida.setEstadisticas(peces.get(i).salud);
+			partida.setTipos(peces.get(i).tipo);
 		}
+		
 		Datos.guardarDatos(partida);
+	}
+	
+	public void creadorDePez(int tipo, Graphics g) {
+		switch(tipo) {
+		case 0:
+		bienvenida.pintarEnMundo(g);
+		
+		cerrarVentana.pintarEnMundo(g);
+		cerrarVentana.pintarBuffer(imagenDone, true);
+		texto.pintarEnMundo(g);
+		texto.pintarBuffer(imagenTexto, true);
+		if (escribiendo) {
+			pintarNombre(g);
+		}
+		break;
+		
+		case 1:
+			nuevoPayaso.pintarEnMundo(g);
+			cerrarVentana.pintarEnMundo(g);
+			cerrarVentana.pintarBuffer(imagenDone, true);
+			texto.pintarEnMundo(g);
+			texto.pintarBuffer(imagenTexto, true);
+			if (escribiendo) {
+				pintarNombre(g);
+			}
+			break;
+		case 2:
+			nuevoTortuga.pintarEnMundo(g);
+			cerrarVentana.pintarEnMundo(g);
+			cerrarVentana.pintarBuffer(imagenDone, true);
+			texto.pintarEnMundo(g);
+			texto.pintarBuffer(imagenTexto, true);
+			if (escribiendo) {
+				pintarNombre(g);
+			}
+			break;
+		case 3: 
+			nuevoTiburon.pintarEnMundo(g);
+			cerrarVentana.pintarEnMundo(g);
+			cerrarVentana.pintarBuffer(imagenDone, true);
+			texto.pintarEnMundo(g);
+			texto.pintarBuffer(imagenTexto, true);
+			if (escribiendo) {
+				pintarNombre(g);
+			}
+			break;
+		}
 	}
 
 }

@@ -12,6 +12,7 @@ public class Pez implements Serializable{
 	private static final long serialVersionUID = 1L;
 	String nombre;
 	int salud;
+	int tipo;
 	protected int posX;
 	protected int posY;
 	protected int ancho;
@@ -39,7 +40,7 @@ public class Pez implements Serializable{
 	
 	final Font fuentePeces = new Font("", Font.BOLD, 18);
 	
-	private Pez(int posX, int posY, int ancho, int alto, int velX, int velY,String nombre) {
+	private Pez(int posX, int posY, int ancho, int alto, int velX, int velY,String nombre,int salud,int tipo) {
 		this.posX = posX;
 		this.posY = posY;
 		this.ancho = ancho;
@@ -47,15 +48,17 @@ public class Pez implements Serializable{
 		this.velX = velX;
 		this.velY = velY;
 		this.nombre=nombre;
+		this.salud=salud;
+		this.tipo=tipo;
 		
-		salud=10;
+		
 	}
 
 	
 	
 	public Pez(int posX, int posY, int ancho, int alto, int velX, int velY, Image imgConstructor,
-			boolean redimensionar,String nombre) {
-		this(posX, posY, ancho, alto, velX, velY,nombre);
+			boolean redimensionar,String nombre,int salud,int tipo) {
+		this(posX, posY, ancho, alto, velX, velY,nombre,salud,tipo);
 	
 		referenciaTiempo=System.nanoTime();
 		pintarBuffer(imgConstructor, redimensionar);
@@ -131,11 +134,11 @@ public class Pez implements Serializable{
 		if(focuseado) {
 		g.setColor(Color.red);
 		for (int i = 0; i < salud; i++) {
-		int posicionFinal = posX+posicionX;
+		int posicionFinal = (posX+10)+posicionX;
 		
 		posicionX +=10;
 		
-		g.fillRect(posicionFinal, posY+ancho+5, 20, 10);
+		g.fillRect(posicionFinal, posY+alto+5, 20, 10);
 		}
 		
 		g.setColor(Color.DARK_GRAY);

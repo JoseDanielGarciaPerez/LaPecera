@@ -6,8 +6,8 @@ public class Partida implements Serializable{
 	
 	private int peces;
 	private ArrayList<String> nombres = new ArrayList<String>();
-//	private ArrayList<String> estadisticas = new ArrayList<String>();
-	
+	private ArrayList<Integer> estadisticas = new ArrayList<Integer>();
+	private ArrayList<Integer> tipos = new ArrayList<Integer>();
 	
 	public int getPeces() {
 		return peces;
@@ -21,10 +21,23 @@ public class Partida implements Serializable{
 	public void setNombres(String nombre) {
 		nombres.add(nombre);
 	}
-//	public ArrayList<String> getEstadisticas() {
-//		return estadisticas;
-//	}
-//	public void setEstadisticas(ArrayList<String> estadisticas) {
-//		this.estadisticas = estadisticas;
-//	}
+	public ArrayList<Integer> getEstadisticas() {
+		return estadisticas;
+	}
+	public void setEstadisticas(int salud) {
+		estadisticas.add(salud);
+	}
+	
+	public void setNombres(ArrayList<String> nombres) {
+		this.nombres = nombres;
+	}
+	public void setEstadisticas(ArrayList<Integer> estadisticas) {
+		this.estadisticas = estadisticas;
+	}
+	public ArrayList<Integer> getTipos() {
+		return tipos;
+	}
+	public void setTipos(int tipo) {
+		tipos.add(tipo);
+	}
 }

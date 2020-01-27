@@ -36,7 +36,7 @@ static File archivo = new File("./Partidas/partida.obj");
 		Partida partida=null;
 		try {
 			if(!archivo.exists()) {
-				System.out.println("No existe");
+				
 			}else {
 			ois = new ObjectInputStream(new FileInputStream("./Partidas/partida.obj"));
 			
