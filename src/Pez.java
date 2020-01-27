@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -28,12 +29,16 @@ public class Pez implements Serializable{
 	protected boolean focuseado = false;
 	Image imagenDerecha;
 	Image imagenIzquierda;
+	Image imagenMuerto;
 	
 	double referenciaTiempo = 0;
 	double tiempoTranscurrido =0;
 	boolean usadoDerecha=false;
 	boolean usadoIzquierda=false;
-
+	boolean usadoMuerto = false;
+	
+	final Font fuentePeces = new Font("", Font.BOLD, 18);
+	
 	private Pez(int posX, int posY, int ancho, int alto, int velX, int velY,String nombre) {
 		this.posX = posX;
 		this.posY = posY;
@@ -71,7 +76,7 @@ public class Pez implements Serializable{
 	public void movimientoPez(PanelJuego panelJuego) {
 		
 			
-			
+			if(usadoMuerto==false) {
 			if(movimiento==false) {
 				movimiento=true;
 				
@@ -113,13 +118,30 @@ public class Pez implements Serializable{
 			}
 			
 				
-		
+			}else {
+				if(posY>0)
+				posY-=1;
+			}
 
 	}
 
 	public void pintarEnMundo(Graphics g) {
-
+		int posicionX =0;
 		g.drawImage(buffer, posX, posY, null);
+		if(focuseado) {
+		g.setColor(Color.red);
+		for (int i = 0; i < salud; i++) {
+		int posicionFinal = posX+posicionX;
+		
+		posicionX +=10;
+		
+		g.fillRect(posicionFinal, posY+ancho+5, 20, 10);
+		}
+		
+		g.setColor(Color.DARK_GRAY);
+		g.setFont(fuentePeces);
+		g.drawString(nombre, posX+20, posY);
+		}
 	}
 
 	public boolean colisiona(Sprite otro) {
@@ -131,7 +153,7 @@ public class Pez implements Serializable{
 	}
 	
 	public void buscarComida(Sprite otro) {
-		
+		if(usadoMuerto==false) {
 		if(posX>otro.posX) {
 			posX -=velX;
 			if(usadoIzquierda==false) {
@@ -159,7 +181,7 @@ public class Pez implements Serializable{
 		}
 		
 		
-			
+		}
 			
 		
 	}
@@ -168,18 +190,26 @@ public class Pez implements Serializable{
 	public void hambre() {
 		tiempoTranscurrido=System.nanoTime();
 		
-		if(tiempoTranscurrido-referenciaTiempo >= 3e+11 && salud>=1) {
+		if(tiempoTranscurrido-referenciaTiempo >= 3e+11  && salud>=1) {
 			salud-=1;
-			System.out.println("Salud: "+salud);
+			
 			referenciaTiempo=System.nanoTime();
 			
+		}
+		
+		if(salud==0) {
+			if(usadoMuerto==false) {
+				pintarBuffer(imagenMuerto, true);
+				usadoMuerto=true;
+			}
 		}
 	}
 
 
 		
-	public void añadirImagenes(Image imagen1,Image imagen2) {
+	public void añadirImagenes(Image imagen1,Image imagen2,Image imagen3) {
 		this.imagenDerecha = imagen1;
 		this.imagenIzquierda = imagen2;
+		this.imagenMuerto=imagen3;
 	}
 }
