@@ -23,14 +23,14 @@ public class PantallaJuego implements Pantalla, Serializable {
 	// ||variables para el fondo||
 	private BufferedImage fondo;
 	private Image fondoEscalado;
-
+	private int dineroValor;
 	private ArrayList<Pez> peces = new ArrayList<Pez>();
 	private ArrayList<Sprite> comidas = new ArrayList<Sprite>();
 	private ArrayList<Sprite> burbujas = new ArrayList<Sprite>();
 	private BufferedImage imagenGalleta, imagenPezIzquierda, imagenPezDerecha, imagenComida, imagenCerrar,
 			imagenBurbuja, imagenConcha, imagenBienvenida, imagenDone, imagenTexto, imagenMuerto,imagenTienda,imagenNuevoPayaso,imagenNuevoTortuga,imagenNuevoTiburon,imagenTortugaIzquierda,imagenTortugaDerecha,
-			imagenTiburonIzquierda,imagenTiburonDerecha,imagenTortugaMuerta,imagenTiburonMuerto;
-	private Sprite comida, cerrar, agarrar, bienvenida, cerrarVentana, texto,tienda,dinero,nuevoPayaso,nuevoTortuga,nuevoTiburon;
+			imagenTiburonIzquierda,imagenTiburonDerecha,imagenTortugaMuerta,imagenTiburonMuerto,imagenMoneda;
+	private Sprite comida, cerrar, agarrar, bienvenida, cerrarVentana, texto,tienda,dineroSprite,nuevoPayaso,nuevoTortuga,nuevoTiburon;
 	private boolean darComida = false;
 	private boolean escribiendo = false;
 	
@@ -80,6 +80,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 			imagenTiburonDerecha = ImageIO.read(new File("Imagenes/tiburon-derecha.png"));
 			imagenTiburonIzquierda = ImageIO.read(new File("Imagenes/tiburon-izquierda.png"));
 			imagenTiburonMuerto = ImageIO.read(new File("Imagenes/tiburon-abajo.png"));
+			imagenMoneda = ImageIO.read(new File("Imagenes/moneda.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -106,6 +107,8 @@ public class PantallaJuego implements Pantalla, Serializable {
 		
 		nuevoTortuga= new Sprite(0, 0, 800, 500, 0, 0, imagenNuevoTortuga, true, 0);
 		nuevoTiburon= new Sprite(0, 0, 800, 500, 0, 0, imagenNuevoTiburon, true, 0);
+		
+		dineroSprite = new Sprite(10, juego.getHeight()-60, 40, 40, 0, 0, imagenMoneda, true, 0);
 
 		if (partida == null) {
 			nuevoPez=true;
@@ -160,6 +163,11 @@ public class PantallaJuego implements Pantalla, Serializable {
 
 			cerrar.pintarEnMundo(g);
 			cerrar.pintarBuffer(imagenCerrar, true);
+			
+			dineroSprite.pintarEnMundo(g);
+			
+			g.setFont(fuentePeces);
+			g.drawString(Integer.toString(dineroValor), 60, juego.getHeight()-30);
 		}
 		agarrar.pintarEnMundo(g);
 
@@ -197,6 +205,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 				if (peces.get(i).colisiona(comidas.get(comidas.size() - 1))) {
 					if (peces.get(i).salud <= 10)
 						peces.get(i).salud += 1;
+					dineroValor+=1;
 					comidas.remove(comidas.size() - 1);
 					if (comidas.size() == 0)
 						break;
