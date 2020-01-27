@@ -23,7 +23,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 	// ||variables para el fondo||
 	private BufferedImage fondo;
 	private Image fondoEscalado;
-	private int dineroValor;
+	 int dineroValor;
 	private ArrayList<Pez> peces = new ArrayList<Pez>();
 	private ArrayList<Sprite> comidas = new ArrayList<Sprite>();
 	private ArrayList<Sprite> burbujas = new ArrayList<Sprite>();
@@ -33,10 +33,10 @@ public class PantallaJuego implements Pantalla, Serializable {
 			imagenTiburonIzquierda, imagenTiburonDerecha, imagenTortugaMuerta, imagenTiburonMuerto, imagenMoneda,
 			imagenMenu;
 	private Sprite comida, cerrar, agarrar, bienvenida, cerrarVentana, texto, tienda, dineroSprite, nuevoPayaso,
-			nuevoTortuga, nuevoTiburon, menu,cerrarMenu;
+			nuevoTortuga, nuevoTiburon, menu, cerrarMenu;
 	private boolean darComida = false;
 	private boolean escribiendo = false;
-	
+	private boolean vender = false;
 	int valorX, valorY;
 	private VentanaPrincipal ventana;
 	boolean partidaInicida;
@@ -46,6 +46,8 @@ public class PantallaJuego implements Pantalla, Serializable {
 	private double tiempoInicial = 0;
 	private double contadorTiempo = 0;
 	String cadena = "";
+	
+	private int ultClickado = 0;
 	final Font fuenteNombre = new Font("", Font.BOLD, 60);
 	final Font fuentePeces = new Font("", Font.BOLD, 18);
 	Partida partida;
@@ -118,13 +120,13 @@ public class PantallaJuego implements Pantalla, Serializable {
 
 		menu = new Sprite(80, juego.getHeight() - 100, 100, 100, 0, 0, imagenMenu, true, false);
 
-		cerrarMenu = new Sprite(70,juego.getHeight() - 100, 40, 40, 0, 0, imagenCerrar, true, false);
-		
+		cerrarMenu = new Sprite(70, juego.getHeight() - 100, 40, 40, 0, 0, imagenCerrar, true, false);
+
 		if (partida == null) {
 			nuevoPez = true;
 		} else {
 			nuevoPez = false;
-
+			dineroValor=partida.getDinero();
 			for (int i = 0; i < partida.getPeces(); i++) {
 				switch (partida.getTipos().get(i)) {
 				case 1:
@@ -161,8 +163,8 @@ public class PantallaJuego implements Pantalla, Serializable {
 			for (int i = 0; i < peces.size(); i++) {
 
 				peces.get(i).pintarEnMundo(g);
-				if (peces.get(i).clickado && cerrarMenu.visible==true) {
-					menuPez(peces.get(i), g);
+				if (peces.get(i).clickado && cerrarMenu.visible == true) {
+					menuPez( g);
 				}
 			}
 
@@ -260,37 +262,51 @@ public class PantallaJuego implements Pantalla, Serializable {
 			}
 
 			if (tienda.enBoton) {
-				juego.pantallaEjecucion = new PantallaTienda(this, juego, ventana);
+				juego.pantallaEjecucion = new PantallaTienda(this, juego, ventana,dineroValor);
 			}
 
 			for (int i = 0; i < peces.size(); i++) {
-				
-				if (peces.get(i).focuseado || menu.enBoton) {
-					
-					peces.get(i).clickado = true;
-					
-					menu.visible=true;
-					cerrarMenu.visible=true;
-						
-					
 
-				}else {
+				if (peces.get(i).focuseado || menu.enBoton) {
+					if(peces.get(i).focuseado) {
+						ultClickado = i;
+						peces.get(i).clickado = true;
+					}
 					
+					menu.visible = true;
+					cerrarMenu.visible = true;
+
+				} else {
 					
-				
 					peces.get(i).clickado = false;
-					
-					
+
 				}
 			}
-			
-			if(cerrarMenu.enBoton) {
-				menu.visible=false;
-				cerrarMenu.visible=false;
+
+			if (cerrarMenu.enBoton) {
+				
+				menu.visible = false;
+				cerrarMenu.visible = false;
 			}
 			
-			
+			if(menu.enBoton) {
+				if(peces.size()>0)
+					switch(peces.get(ultClickado).tipo) {
+					case 1:
+						dineroValor+=100;
+						break;
+					case 2:
+						dineroValor+=500;
+						break;
+					case 3:
+						dineroValor+=2000;
+						break;
+					}
+				peces.remove(ultClickado);
+				}
 				
+			
+		
 
 		} else {
 			if (cerrarVentana.enBoton && cadena.length() > 0) {
@@ -320,7 +336,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 			if (e.getX() >= peces.get(i).posX && e.getX() <= peces.get(i).posX + peces.get(i).ancho
 					&& e.getY() >= peces.get(i).posY && e.getY() <= peces.get(i).posY + peces.get(i).alto) {
 				peces.get(i).focuseado = true;
-				
+
 			} else {
 				peces.get(i).focuseado = false;
 
@@ -365,8 +381,8 @@ public class PantallaJuego implements Pantalla, Serializable {
 
 	public void comprobarBoton(MouseEvent raton, Sprite sprite, Boolean efecto) {
 		if (raton.getX() >= sprite.getPosX() && raton.getX() <= sprite.getPosX() + sprite.ancho
-				&& raton.getY() >= sprite.getPosY() && raton.getY() <= sprite.getPosY() + sprite.alto && sprite.visible
-				) {
+				&& raton.getY() >= sprite.getPosY() && raton.getY() <= sprite.getPosY() + sprite.alto
+				&& sprite.visible) {
 
 			sprite.enBoton = true;
 			if (efecto) {
@@ -440,6 +456,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 		Partida partida = new Partida();
 
 		partida.setPeces(peces.size());
+		partida.setDinero(dineroValor);
 		for (int i = 0; i < peces.size(); i++) {
 			partida.setNombres(peces.get(i).nombre);
 			partida.setEstadisticas(peces.get(i).salud);
@@ -496,12 +513,13 @@ public class PantallaJuego implements Pantalla, Serializable {
 		}
 	}
 
-	public void menuPez(Pez pez, Graphics g) {
-		
+	public void menuPez( Graphics g) {
+
 		menu.pintarEnMundo(g);
 		cerrarMenu.pintarEnMundo(g);
 		cerrarMenu.pintarBuffer(imagenCerrar, true);
+		
+		
 	}
-	
 
 }
