@@ -38,21 +38,21 @@ public class PantallaTienda implements Pantalla {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		cerrar = new Sprite(10, 10, 40, 40, 0, 0, imagenCerrar, true, 0);
+		cerrar = new Sprite(10, 10, 40, 40, 0, 0, imagenCerrar, true, true);
 		
-		agarrar = new Sprite(juego.getWidth() / 2 - 30, 0, 30, 30, 0, 0, imagenConcha, true, 0);
+		agarrar = new Sprite(juego.getWidth() / 2 - 30, 0, 30, 30, 0, 0, imagenConcha, true, true);
 		
-		botonComprarPayaso  = new Sprite(400, 100, 300, 100, 0, 0, imagenBoton, true, 0);
+		botonComprarPayaso  = new Sprite(400, 100, 300, 100, 0, 0, imagenBoton, true, true);
 		
-		botonComprarTortuga = new Sprite(400, 250, 300, 100, 0, 0, imagenBoton, true, 0);
+		botonComprarTortuga = new Sprite(400, 250, 300, 100, 0, 0, imagenBoton, true, true);
 		
-		botonComprarTiburon = new Sprite(400, 400, 300, 100, 0, 0, imagenBoton, true, 0);
+		botonComprarTiburon = new Sprite(400, 400, 300, 100, 0, 0, imagenBoton, true, true);
 		
-		pez = new Sprite(300, 100, 100, 100, 0, 0, imagenPayaso, true, 0);
+		pez = new Sprite(300, 100, 100, 100, 0, 0, imagenPayaso, true, true);
 		
-		tortuga  = new Sprite(300, 250, 100, 100, 0, 0, imagenTortuga, true, 0);
+		tortuga  = new Sprite(300, 250, 100, 100, 0, 0, imagenTortuga, true, true);
 		
-		tiburon =  new Sprite(300, 400, 200, 100, 0, 0, imagenTiburon, true, 0);
+		tiburon =  new Sprite(300, 400, 200, 100, 0, 0, imagenTiburon, true, true);
 		
 		
 	}

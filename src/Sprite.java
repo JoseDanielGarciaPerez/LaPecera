@@ -29,7 +29,7 @@ public class Sprite implements Serializable {
 	protected int colisionado;
 	protected boolean enBoton = false;
 	protected final int MOVERSE = 8;
-	
+	protected boolean visible;
 	protected boolean comida=false;
 
 	/**
@@ -74,9 +74,10 @@ public class Sprite implements Serializable {
 	 *                       de entrada.
 	 */
 	public Sprite(int posX, int posY, int ancho, int alto, int velX, int velY, Image imgConstructor,
-			boolean redimensionar, int colisionado) {
+			boolean redimensionar, boolean visible) {
 		this(posX, posY, ancho, alto, velX, velY);
-		this.colisionado = colisionado;
+		this.visible=visible;
+		
 		pintarBuffer(imgConstructor, redimensionar);
 	}
 

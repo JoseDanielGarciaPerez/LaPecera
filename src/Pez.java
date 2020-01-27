@@ -3,7 +3,11 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+
+import javax.imageio.ImageIO;
 
 public class Pez implements Serializable{
 	/**
@@ -21,13 +25,15 @@ public class Pez implements Serializable{
 	protected int velY;
 	int direccionX = 0;
 	int direccionY = 0;
-	protected BufferedImage buffer;
+	protected BufferedImage buffer,imagenmoneda;
+	protected Sprite moneda;
 	protected final int MOVERSE = 8;
 	
 	protected boolean comida = false;
 	protected boolean haComido=false;
 	protected boolean movimiento = false;
 	protected boolean focuseado = false;
+	protected boolean clickado = false;
 	Image imagenDerecha;
 	Image imagenIzquierda;
 	Image imagenMuerto;
@@ -50,6 +56,8 @@ public class Pez implements Serializable{
 		this.nombre=nombre;
 		this.salud=salud;
 		this.tipo=tipo;
+		
+		
 		
 		
 	}
@@ -131,7 +139,9 @@ public class Pez implements Serializable{
 	public void pintarEnMundo(Graphics g) {
 		int posicionX =0;
 		g.drawImage(buffer, posX, posY, null);
+		
 		if(focuseado) {
+			
 		g.setColor(Color.red);
 		for (int i = 0; i < salud; i++) {
 		int posicionFinal = (posX+10)+posicionX;
