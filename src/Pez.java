@@ -21,14 +21,16 @@ public class Pez implements Serializable{
 	int direccionY = 0;
 	protected BufferedImage buffer;
 	protected final int MOVERSE = 8;
-
-	protected boolean comida = false;
 	
+	protected boolean comida = false;
+	protected boolean haComido=false;
 	protected boolean movimiento = false;
 	protected boolean focuseado = false;
 	Image imagenDerecha;
 	Image imagenIzquierda;
 	
+	double referenciaTiempo = 0;
+	double tiempoTranscurrido =0;
 	boolean usadoDerecha=false;
 	boolean usadoIzquierda=false;
 
@@ -40,6 +42,8 @@ public class Pez implements Serializable{
 		this.velX = velX;
 		this.velY = velY;
 		this.nombre=nombre;
+		
+		salud=10;
 	}
 
 	
@@ -48,6 +52,7 @@ public class Pez implements Serializable{
 			boolean redimensionar,String nombre) {
 		this(posX, posY, ancho, alto, velX, velY,nombre);
 	
+		referenciaTiempo=System.nanoTime();
 		pintarBuffer(imgConstructor, redimensionar);
 	}
 	
@@ -61,13 +66,7 @@ public class Pez implements Serializable{
 		g.dispose();
 	}
 
-	private void pintarBuffer(Color color) {
-		buffer = new BufferedImage(this.ancho, this.alto, BufferedImage.TYPE_INT_ARGB);
-		Graphics g = buffer.getGraphics();
-		g.setColor(color);
-		g.fillRect(0, 0, this.ancho, this.alto);
-		g.dispose();
-	}
+
 
 	public void movimientoPez(PanelJuego panelJuego) {
 		
@@ -159,8 +158,21 @@ public class Pez implements Serializable{
 			posY+=velY;
 		}
 		
-		if(posX == otro.posX && posY == otro.posY) {
-			movimiento=false;
+		
+			
+			
+		
+	}
+	
+	
+	public void hambre() {
+		tiempoTranscurrido=System.nanoTime();
+		
+		if(tiempoTranscurrido-referenciaTiempo >= 3e+11 && salud>=1) {
+			salud-=1;
+			System.out.println("Salud: "+salud);
+			referenciaTiempo=System.nanoTime();
+			
 		}
 	}
 

@@ -165,6 +165,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 			for (int i = 0; i < peces.size(); i++) {
 				peces.get(i).movimientoPez(juego);
 				pintarBurbujas(tiempoInicial, peces.get(i));
+				peces.get(i).hambre();
 				
 			}
 		} else {
@@ -172,6 +173,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 
 				peces.get(i).buscarComida(comidas.get(comidas.size() - 1));
 				if (peces.get(i).colisiona(comidas.get(comidas.size() - 1))) {
+					peces.get(i).salud+=1;
 					comidas.remove(comidas.size() - 1);
 					if (comidas.size() == 0)
 						break;
@@ -322,7 +324,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 	public void pintarBurbujas(Double tiempoTotal,Pez pez) {
 		contadorTiempo+= System.nanoTime();
 		
-		if(((contadorTiempo/1e9)-(tiempoInicial/1e9))>=1000000) {
+		if(((contadorTiempo/1e9)-(tiempoInicial/1e9))>=100000000) {
 			
 		burbujas.add(new Sprite(pez.posX,pez.posY,30,30,1,1,imagenBurbuja,false,0));
 		tiempoInicial = System.nanoTime();
