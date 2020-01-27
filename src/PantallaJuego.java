@@ -28,11 +28,11 @@ public class PantallaJuego implements Pantalla, Serializable {
 	private ArrayList<Sprite> comidas = new ArrayList<Sprite>();
 	private ArrayList<Sprite> burbujas = new ArrayList<Sprite>();
 	private BufferedImage imagenGalleta, imagenPezIzquierda, imagenPezDerecha, imagenComida, imagenCerrar,
-			imagenBurbuja, imagenConcha, imagenBienvenida, imagenDone, imagenTexto, imagenMuerto;
-	private Sprite comida, cerrar, agarrar, bienvenida, cerrarVentana, texto;
+			imagenBurbuja, imagenConcha, imagenBienvenida, imagenDone, imagenTexto, imagenMuerto,imagenTienda;
+	private Sprite comida, cerrar, agarrar, bienvenida, cerrarVentana, texto,tienda,dinero;
 	private boolean darComida = false;
 	private boolean escribiendo = false;
-	private boolean mostrarDatos = false;
+	
 	int valorX, valorY;
 	private VentanaPrincipal ventana;
 	private boolean partidaInicida;
@@ -67,6 +67,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 			imagenDone = ImageIO.read(new File("Imagenes/done.png"));
 			imagenTexto = ImageIO.read(new File("Imagenes/texto.png"));
 			imagenMuerto = ImageIO.read(new File("Imagenes/pez-abajo.png"));
+			imagenTienda = ImageIO.read(new File("Imagenes/tienda.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -74,6 +75,9 @@ public class PantallaJuego implements Pantalla, Serializable {
 
 		comida = new Sprite(juego.getWidth() - 60, juego.getHeight() - juego.getHeight() + 20, 40, 40, 0, 0,
 				imagenComida, false, 0);
+		
+		tienda = new Sprite(juego.getWidth() - 60, juego.getHeight() - juego.getHeight() + 80, 40, 40, 0, 0,
+				imagenTienda, true, 0);
 		cerrar = new Sprite(10, 10, 40, 40, 0, 0, imagenCerrar, true, 0);
 
 		agarrar = new Sprite(juego.getWidth() / 2 - 30, 0, 30, 30, 0, 0, imagenConcha, true, 0);
@@ -116,6 +120,9 @@ public class PantallaJuego implements Pantalla, Serializable {
 			}
 			comida.pintarEnMundo(g);
 			comida.pintarBuffer(imagenComida, true);
+			
+			tienda.pintarEnMundo(g);
+			tienda.pintarBuffer(imagenTienda, true);
 
 			cerrar.pintarEnMundo(g);
 			cerrar.pintarBuffer(imagenCerrar, true);
@@ -200,6 +207,10 @@ public class PantallaJuego implements Pantalla, Serializable {
 				guardarPartida();
 				System.exit(0);
 			}
+			
+			if(tienda.enBoton) {
+				juego.pantallaEjecucion = new PantallaTienda(this,juego,ventana);
+			}
 		} else {
 			if (cerrarVentana.enBoton && cadena.length() > 0) {
 				crearPez();
@@ -238,6 +249,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 		comprobarBoton(e, agarrar, true);
 		comprobarBoton(e, cerrarVentana, true);
 		comprobarBoton(e, texto, false);
+		comprobarBoton(e, tienda, true);
 
 	}
 
