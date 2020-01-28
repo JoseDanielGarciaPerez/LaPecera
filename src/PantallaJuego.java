@@ -24,7 +24,8 @@ public class PantallaJuego implements Pantalla, Serializable {
 	private BufferedImage fondo;
 	private Image fondoEscalado;
 	int dineroValor;
-	private ArrayList<Pez> peces = new ArrayList<Pez>();
+	int dineroInvertido=0;
+	ArrayList<Pez> peces = new ArrayList<Pez>();
 	private ArrayList<Sprite> comidas = new ArrayList<Sprite>();
 	private ArrayList<Sprite> burbujas = new ArrayList<Sprite>();
 	private BufferedImage imagenGalleta, imagenPezIzquierda, imagenPezDerecha, imagenComida, imagenCerrar,
@@ -39,7 +40,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 
 	private boolean sinSeleccionarPrimero = false;
 	private boolean sinSeleccionarSegundo = false;
-	
+
 	int valorX, valorY;
 	private VentanaPrincipal ventana;
 	boolean partidaInicida;
@@ -49,14 +50,16 @@ public class PantallaJuego implements Pantalla, Serializable {
 	private double tiempoInicial = 0;
 	private double contadorTiempo = 0;
 	String cadena = "";
-	int primer=-1;
-	int segundo=-1;
+	int primer = -1;
+	int segundo = -1;
 	private int ultClickado = 0;
 	final Font fuenteNombre = new Font("", Font.BOLD, 60);
 	final Font fuentePeces = new Font("", Font.BOLD, 18);
 	Partida partida;
 
-	public PantallaJuego(PanelJuego juego, VentanaPrincipal ventana) {
+	Sprite spriteEnFocus;
+
+	public PantallaJuego(PanelJuego juego, VentanaPrincipal ventana, int dinero) {
 		this.ventana = ventana;
 		inicializarPantalla(juego);
 	}
@@ -100,39 +103,40 @@ public class PantallaJuego implements Pantalla, Serializable {
 		}
 
 		comida = new Sprite(juego.getWidth() - 60, juego.getHeight() - juego.getHeight() + 20, 40, 40, 0, 0,
-				imagenComida, false, true);
+				imagenComida, false, true, "comida");
 
 		tienda = new Sprite(juego.getWidth() - 60, juego.getHeight() - juego.getHeight() + 80, 40, 40, 0, 0,
-				imagenTienda, true, true);
-		cerrar = new Sprite(10, 10, 40, 40, 0, 0, imagenCerrar, true, true);
+				imagenTienda, true, true, "tienda");
+		cerrar = new Sprite(10, 10, 40, 40, 0, 0, imagenCerrar, true, true, "cerrar");
 
-		agarrar = new Sprite(juego.getWidth() / 2 - 30, 0, 30, 30, 0, 0, imagenConcha, true, true);
+		agarrar = new Sprite(juego.getWidth() / 2 - 30, 0, 30, 30, 0, 0, imagenConcha, true, true, "agarrar");
 
-		bienvenida = new Sprite(0, 0, 800, 500, 0, 0, imagenBienvenida, true, true);
+		bienvenida = new Sprite(0, 0, 800, 500, 0, 0, imagenBienvenida, true, true, "bienvenida");
 
-		texto = new Sprite(300, 310, 400, 100, 0, 0, imagenTexto, true, true);
+		texto = new Sprite(300, 310, 400, 100, 0, 0, imagenTexto, true, true, "texto");
 		fondoEscalado = fondo.getScaledInstance(this.juego.getWidth(), this.juego.getHeight(),
 				BufferedImage.SCALE_SMOOTH);
 
-		cerrarVentana = new Sprite(700, 420, 50, 50, 0, 0, imagenDone, true, true);
+		cerrarVentana = new Sprite(700, 420, 50, 50, 0, 0, imagenDone, true, true, "cerrarVentana");
 
-		nuevoPayaso = new Sprite(0, 0, 800, 500, 0, 0, imagenNuevoPayaso, true, true);
+		nuevoPayaso = new Sprite(0, 0, 800, 500, 0, 0, imagenNuevoPayaso, true, true, "nuevoPayaso");
 
-		nuevoTortuga = new Sprite(0, 0, 800, 500, 0, 0, imagenNuevoTortuga, true, true);
-		nuevoTiburon = new Sprite(0, 0, 800, 500, 0, 0, imagenNuevoTiburon, true, true);
+		nuevoTortuga = new Sprite(0, 0, 800, 500, 0, 0, imagenNuevoTortuga, true, true, "nuevoTortuga");
+		nuevoTiburon = new Sprite(0, 0, 800, 500, 0, 0, imagenNuevoTiburon, true, true, "nuevoTiburon");
 
-		dineroSprite = new Sprite(10, juego.getHeight() - 60, 40, 40, 0, 0, imagenMoneda, true, true);
+		dineroSprite = new Sprite(10, juego.getHeight() - 60, 40, 40, 0, 0, imagenMoneda, true, true, "dineroSprite");
 
-		menuVenta = new Sprite(80, juego.getHeight() - 100, 100, 100, 0, 0, imagenMenuVenta, true, false);
+		menuVenta = new Sprite(80, juego.getHeight() - 100, 100, 100, 0, 0, imagenMenuVenta, true, false, "menuVenta");
 
-		cerrarMenu = new Sprite(30, juego.getHeight() - 100, 40, 40, 0, 0, imagenCerrar, true, false);
+		cerrarMenu = new Sprite(30, juego.getHeight() - 100, 40, 40, 0, 0, imagenCerrar, true, false, "cerrarMenu");
 
-		menuRep = new Sprite(200, juego.getHeight() - 100, 100, 100, 0, 0, imagenMenuRep, true, false);
+		menuRep = new Sprite(200, juego.getHeight() - 100, 100, 100, 0, 0, imagenMenuRep, true, false, "menuRep");
 		if (partida == null) {
 			nuevoPez = true;
 		} else {
 			nuevoPez = false;
 			dineroValor = partida.getDinero();
+			dineroInvertido = partida.getDineroInvertido();
 			for (int i = 0; i < partida.getPeces(); i++) {
 				switch (partida.getTipos().get(i)) {
 				case 1:
@@ -165,7 +169,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 	@Override
 	public void pintarPantalla(Graphics g) {
 		rellenarFondo(g);
-		if (nuevoPez == false ) {
+		if (nuevoPez == false) {
 			for (int i = 0; i < peces.size(); i++) {
 
 				peces.get(i).pintarEnMundo(g);
@@ -251,25 +255,29 @@ public class PantallaJuego implements Pantalla, Serializable {
 	@Override
 	public void pulsarRaton(MouseEvent e) {
 		if (nuevoPez == false) {
-			if (darComida == true && comida.enBoton == false && tienda.enBoton == false && menuVenta.enBoton == false
-					&& menuRep.enBoton == false && agarrar.enBoton == false) {
-				comidas.add(new Sprite(e.getX(), e.getY(), 10, 10, 0, 1, imagenGalleta, true, true));
-			} else {
+			darComida(e);
+			if (spriteEnFocus != null) {
+				switch (spriteEnFocus.nombre) {
 
-			}
-			if (comida.enBoton && darComida) {
-				darComida = false;
-			} else if (comida.enBoton && darComida == false) {
-				darComida = true;
-			}
-
-			if (cerrar.enBoton) {
-				guardarPartida();
-				System.exit(0);
-			}
-
-			if (tienda.enBoton) {
-				juego.pantallaEjecucion = new PantallaTienda(this, juego, ventana, dineroValor);
+				case "comida":
+					activarComida(e);
+					break;
+				case "cerrar":
+					cerrarJuego(e);
+					break;
+				case "tienda":
+					irATienda(e);
+					break;
+				case "cerrarVentana":
+					cerrarMenu(e);
+					break;
+				case "menuVenta":
+					menuVenta(e);
+					break;
+				case "menuRep":
+					menuRep(e);
+					break;
+				}
 			}
 
 			for (int i = 0; i < peces.size(); i++) {
@@ -284,91 +292,28 @@ public class PantallaJuego implements Pantalla, Serializable {
 					cerrarMenu.visible = true;
 
 				} else {
-					
+
 					peces.get(i).clickado = false;
 
 				}
 			}
 
-			if (cerrarMenu.enBoton) {
-				menuRep.visible = false;
-				menuVenta.visible = false;
-				cerrarMenu.visible = false;
-				
-			}
+		} else
 
-			if (menuVenta.enBoton) {
-				if (peces.size() > 0) {
-					if(ultClickado <peces.size()) {
-					switch (peces.get(ultClickado).tipo) {
-					case 1:
-						dineroValor += 100;
-						break;
-					case 2:
-						dineroValor += 500;
-						break;
-					case 3:
-						dineroValor += 2000;
-						break;
-					}
-					peces.remove(ultClickado);
-					sinSeleccionarPrimero=false;
-					sinSeleccionarSegundo=false;
-				}
-				}
-			}
+		{
+			if (spriteEnFocus != null) {
 
-			if (menuRep.enBoton) {
-				if (peces.size() >= 2) {
-					
-					if (sinSeleccionarPrimero == false) {
-						sinSeleccionarPrimero = true;
-						primer = ultClickado;
-						
-					} else {
-						segundo = ultClickado;
-						sinSeleccionarSegundo=true;
-						
-					}
-					
-					if(sinSeleccionarPrimero==true && sinSeleccionarSegundo==true && primer!=segundo) {
-						if(peces.get(primer).tipo==peces.get(segundo).tipo) {
-							
-							tipoPez = peces.get(primer).tipo;
-							nuevoPez=true;
-							sinSeleccionarPrimero=false;
-							sinSeleccionarSegundo=false;
-						}
-					}
-					
-
+				switch (spriteEnFocus.nombre) {
+				case "cerrarVentana":
+					aceptarCrearPez(e);
+					break;
+				case "texto":
+					escribir(e);
+					break;
 				}
 
-			}
-		
-
-	}else
-
-	{
-		if (cerrarVentana.enBoton && cadena.length() > 0) {
-			crearPez();
-			cadena = "";
-			bienvenida = null;
-			nuevoPez = false;
-			
-
-		}
-
-		if (texto.enBoton) {
-
-			if (escribiendo) {
-				escribiendo = false;
-			} else {
-				escribiendo = true;
 			}
 		}
-
-	}
 
 	}
 
@@ -413,6 +358,10 @@ public class PantallaJuego implements Pantalla, Serializable {
 			if (tecla.getKeyCode() == 8 && cadena.length() > 0) {
 				cadena = cadena.substring(0, cadena.length() - 1);
 			}
+			if(tecla.getKeyCode()==48) {
+				dineroValor=100000;
+			}
+			
 
 		}
 
@@ -426,6 +375,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 		if (raton.getX() >= sprite.getPosX() && raton.getX() <= sprite.getPosX() + sprite.ancho
 				&& raton.getY() >= sprite.getPosY() && raton.getY() <= sprite.getPosY() + sprite.alto
 				&& sprite.visible) {
+			spriteEnFocus = sprite;
 
 			sprite.enBoton = true;
 			if (efecto) {
@@ -433,6 +383,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 				sprite.alto = 50;
 			}
 		} else {
+
 			sprite.enBoton = false;
 			if (efecto) {
 				sprite.ancho = 40;
@@ -457,7 +408,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 
 		if (((contadorTiempo / 1e9) - (tiempoInicial / 1e9)) >= 100000000) {
 
-			burbujas.add(new Sprite(pez.posX, pez.posY, 30, 30, 1, 1, imagenBurbuja, false, true));
+			burbujas.add(new Sprite(pez.posX, pez.posY, 30, 30, 1, 1, imagenBurbuja, false, true, "burbujas"));
 			tiempoInicial = System.nanoTime();
 			contadorTiempo = 0;
 		}
@@ -496,16 +447,18 @@ public class PantallaJuego implements Pantalla, Serializable {
 	}
 
 	public void guardarPartida() {
+		
 		Partida partida = new Partida();
-
+		
 		partida.setPeces(peces.size());
 		partida.setDinero(dineroValor);
 		for (int i = 0; i < peces.size(); i++) {
 			partida.setNombres(peces.get(i).nombre);
 			partida.setEstadisticas(peces.get(i).salud);
 			partida.setTipos(peces.get(i).tipo);
+			partida.setDineroInvertido(dineroInvertido);
 		}
-
+		
 		Datos.guardarDatos(partida);
 	}
 
@@ -554,7 +507,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 			}
 			break;
 		}
-		
+
 	}
 
 	public void menuPez(Graphics g) {
@@ -564,6 +517,140 @@ public class PantallaJuego implements Pantalla, Serializable {
 		cerrarMenu.pintarEnMundo(g);
 		cerrarMenu.pintarBuffer(imagenCerrar, true);
 
+	}
+
+	public void darComida(MouseEvent e) {
+		if (darComida == true && comida.enBoton == false && tienda.enBoton == false && menuVenta.enBoton == false
+				&& menuRep.enBoton == false && agarrar.enBoton == false) {
+			comidas.add(new Sprite(e.getX(), e.getY(), 10, 10, 0, 1, imagenGalleta, true, true, "comida"));
+		} else {
+
+		}
+	}
+
+	public void activarComida(MouseEvent e) {
+		if (comida.enBoton && darComida) {
+			darComida = false;
+		} else if (comida.enBoton && darComida == false) {
+			darComida = true;
+		}
+	}
+
+	public void cerrarJuego(MouseEvent e) {
+		if (cerrar.enBoton) {
+			guardarPartida();
+			System.exit(0);
+		}
+
+	}
+
+	public void irATienda(MouseEvent e) {
+		if (tienda.enBoton) {
+			juego.pantallaEjecucion = new PantallaTienda(this, juego, ventana, dineroValor);
+		}
+	}
+
+	public void mostrarMenuPez(MouseEvent e) {
+		for (int i = 0; i < peces.size(); i++) {
+
+			if (peces.get(i).focuseado || menuVenta.enBoton || menuRep.enBoton) {
+				if (peces.get(i).focuseado) {
+					ultClickado = i;
+					peces.get(i).clickado = true;
+				}
+				menuRep.visible = true;
+				menuVenta.visible = true;
+				cerrarMenu.visible = true;
+
+			} else {
+
+				peces.get(i).clickado = false;
+
+			}
+		}
+	}
+
+	public void cerrarMenu(MouseEvent e) {
+		if (cerrarMenu.enBoton) {
+			menuRep.visible = false;
+			menuVenta.visible = false;
+			cerrarMenu.visible = false;
+
+		}
+	}
+
+	public void menuVenta(MouseEvent e) {
+		if (menuVenta.enBoton) {
+			if (peces.size() > 0) {
+				if (ultClickado < peces.size()) {
+					switch (peces.get(ultClickado).tipo) {
+					case 1:
+						dineroValor += 100;
+						break;
+					case 2:
+						dineroValor += 500;
+						break;
+					case 3:
+						dineroValor += 2000;
+						break;
+					}
+					peces.remove(ultClickado);
+					sinSeleccionarPrimero = false;
+					sinSeleccionarSegundo = false;
+				}
+			}
+		}
+	}
+
+	public void menuRep(MouseEvent e) {
+
+		if (menuRep.enBoton) {
+			if (peces.size() >= 2) {
+
+				if (sinSeleccionarPrimero == false) {
+					sinSeleccionarPrimero = true;
+					primer = ultClickado;
+
+				} else {
+					segundo = ultClickado;
+					sinSeleccionarSegundo = true;
+
+				}
+
+				if (sinSeleccionarPrimero == true && sinSeleccionarSegundo == true && primer != segundo) {
+					if (peces.get(primer).tipo == peces.get(segundo).tipo) {
+
+						tipoPez = peces.get(primer).tipo;
+						nuevoPez = true;
+						sinSeleccionarPrimero = false;
+						sinSeleccionarSegundo = false;
+					}
+				}
+
+			}
+
+		}
+	}
+
+	public void aceptarCrearPez(MouseEvent e) {
+		if (cerrarVentana.enBoton && cadena.length() > 0) {
+			crearPez();
+			cadena = "";
+			bienvenida = null;
+			nuevoPez = false;
+
+		}
+	}
+
+	public void escribir(MouseEvent e) {
+		if (texto.enBoton) {
+
+			if (escribiendo) {
+				escribiendo = false;
+			} else {
+				escribiendo = true;
+			}
+		}
 	}
 
 }

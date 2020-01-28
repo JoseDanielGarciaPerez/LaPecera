@@ -3,7 +3,6 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JFrame;
 
 public class PantallaInicio implements Pantalla {
 
@@ -35,7 +34,7 @@ public class PantallaInicio implements Pantalla {
 	@Override
 	public void pulsarRaton(MouseEvent e) {
 		if(e.getButton()==MouseEvent.BUTTON1) {
-			juego.pantallaEjecucion = new PantallaJuego(juego,ventana);
+			juego.pantallaEjecucion = new PantallaJuego(juego,ventana,0);
 		}
 
 	}

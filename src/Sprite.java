@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
  *
  */
 public class Sprite implements Serializable {
+	protected String nombre;
 	protected int posX;
 	protected int posY;
 	protected int ancho;
@@ -36,13 +37,14 @@ public class Sprite implements Serializable {
 	 * Constructor privado para evitar repetición de código en los otros
 	 * constructores.
 	 */
-	private Sprite(int posX, int posY, int ancho, int alto, int velX, int velY) {
+	private Sprite(int posX, int posY, int ancho, int alto, int velX, int velY,String nombre) {
 		this.posX = posX;
 		this.posY = posY;
 		this.ancho = ancho;
 		this.alto = alto;
 		this.velX = velX;
 		this.velY = velY;
+		this.nombre=nombre;
 	}
 
 	/**
@@ -50,8 +52,8 @@ public class Sprite implements Serializable {
 	 * 
 	 * @param color Color del sprite.
 	 */
-	public Sprite(int posX, int posY, int ancho, int alto, int velX, int velY, Color color) {
-		this(posX, posY, ancho, alto, velX, velY);
+	public Sprite(int posX, int posY, int ancho, int alto, int velX, int velY, Color color,String nombre) {
+		this(posX, posY, ancho, alto, velX, velY,nombre);
 		pintarBuffer(color);
 	}
 
@@ -61,8 +63,8 @@ public class Sprite implements Serializable {
 	 * 
 	 * @param ruta Ruta de la imagen.
 	 */
-	public Sprite(int posX, int posY, int ancho, int alto, int velX, int velY, String ruta) {
-		this(posX, posY, ancho, alto, velX, velY);
+	public Sprite(int posX, int posY, int ancho, int alto, int velX, int velY, String ruta,String nombre) {
+		this(posX, posY, ancho, alto, velX, velY,nombre);
 		pintarBuffer(ruta);
 	}
 
@@ -74,8 +76,8 @@ public class Sprite implements Serializable {
 	 *                       de entrada.
 	 */
 	public Sprite(int posX, int posY, int ancho, int alto, int velX, int velY, Image imgConstructor,
-			boolean redimensionar, boolean visible) {
-		this(posX, posY, ancho, alto, velX, velY);
+			boolean redimensionar, boolean visible,String nombre) {
+		this(posX, posY, ancho, alto, velX, velY,nombre);
 		this.visible=visible;
 		
 		pintarBuffer(imgConstructor, redimensionar);

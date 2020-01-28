@@ -14,10 +14,11 @@ public class PantallaTienda implements Pantalla {
 	PantallaJuego pecera;
 	PanelJuego juego;
 	VentanaPrincipal ventana;
-	BufferedImage imagenCerrar,fondoEscalado,imagenConcha,imagenBoton,imagenPayaso,imagenTortuga,imagenTiburon,imagenPrecioPez,imagenPrecioTortuga,imagenPrecioTiburon,imagenMoneda;
+	BufferedImage imagenCerrar,fondoEscalado,imagenConcha,imagenBoton,imagenPayaso,imagenTortuga,imagenTiburon,imagenPrecioPez,imagenPrecioTortuga,imagenPrecioTiburon,imagenMoneda,imagenBonificacion;
 	private int dinero;
-	Sprite cerrar,agarrar,botonComprarPayaso,botonComprarTortuga,botonComprarTiburon ,pez,tortuga,tiburon,pPez,pTortuga,pTiburon,dineroSprite;
+	Sprite cerrar,agarrar,botonComprarPayaso,botonComprarTortuga,botonComprarTiburon ,pez,tortuga,tiburon,pPez,pTortuga,pTiburon,dineroSprite,botonBon;
 	final Font fuentePeces = new Font("", Font.BOLD, 18);
+	Sprite spriteEnFocus;
 	public PantallaTienda(PantallaJuego pecera,PanelJuego juego,VentanaPrincipal ventana,int dinero) {
 		this.pecera=pecera;
 		this.dinero=dinero;
@@ -41,35 +42,36 @@ public class PantallaTienda implements Pantalla {
 			imagenPrecioTortuga =ImageIO.read(new File("Imagenes/precioTortuga.png"));
 			imagenPrecioTiburon =ImageIO.read(new File("Imagenes/precioTiburon.png"));
 			imagenMoneda = ImageIO.read(new File("Imagenes/moneda.png"));
+			imagenBonificacion= ImageIO.read(new File("Imagenes/bonificacion.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		cerrar = new Sprite(10, 10, 40, 40, 0, 0, imagenCerrar, true, true);
+		cerrar = new Sprite(10, 10, 40, 40, 0, 0, imagenCerrar, true, true,"cerrar");
 		
-		agarrar = new Sprite(juego.getWidth() / 2 - 30, 0, 30, 30, 0, 0, imagenConcha, true, true);
+		agarrar = new Sprite(juego.getWidth() / 2 - 30, 0, 30, 30, 0, 0, imagenConcha, true, true,"agarrar");
 		
-		botonComprarPayaso  = new Sprite(400, 100, 300, 100, 0, 0, imagenBoton, true, true);
+		botonComprarPayaso  = new Sprite(400, 100, 300, 100, 0, 0, imagenBoton, true, true,"botonComprarPayaso");
 		
-		botonComprarTortuga = new Sprite(400, 250, 300, 100, 0, 0, imagenBoton, true, true);
+		botonComprarTortuga = new Sprite(400, 250, 300, 100, 0, 0, imagenBoton, true, true,"botonComprarTortuga");
 		
-		botonComprarTiburon = new Sprite(400, 400, 300, 100, 0, 0, imagenBoton, true, true);
+		botonComprarTiburon = new Sprite(400, 400, 300, 100, 0, 0, imagenBoton, true, true,"botonComprarTiburon");
 		
-		pez = new Sprite(300, 100, 100, 100, 0, 0, imagenPayaso, true, true);
+		pez = new Sprite(300, 100, 100, 100, 0, 0, imagenPayaso, true, true,"pez");
 		
-		tortuga  = new Sprite(300, 250, 100, 100, 0, 0, imagenTortuga, true, true);
+		tortuga  = new Sprite(300, 250, 100, 100, 0, 0, imagenTortuga, true, true,"tortuga");
 		
-		tiburon =  new Sprite(300, 400, 200, 100, 0, 0, imagenTiburon, true, true);
+		tiburon =  new Sprite(300, 400, 200, 100, 0, 0, imagenTiburon, true, true,"tiburon");
 		
-		pPez= new Sprite(100, 100, 200, 100, 0, 0, imagenPrecioPez, true, true);
+		pPez= new Sprite(100, 100, 200, 100, 0, 0, imagenPrecioPez, true, true,"pPez");
 		
-		pTortuga = new Sprite(100, 250, 200, 100, 0, 0, imagenPrecioTortuga, true, true);
+		pTortuga = new Sprite(100, 250, 200, 100, 0, 0, imagenPrecioTortuga, true, true,"pTortuga");
 		
-		pTiburon = new Sprite(100, 400, 200, 100, 0, 0, imagenPrecioTiburon, true, true);
+		pTiburon = new Sprite(100, 400, 200, 100, 0, 0, imagenPrecioTiburon, true, true,"pTiburon");
 				
-		dineroSprite = new Sprite(10, juego.getHeight() - 60, 40, 40, 0, 0, imagenMoneda, true, true);		
+		dineroSprite = new Sprite(10, juego.getHeight() - 60, 40, 40, 0, 0, imagenMoneda, true, true,"dineroSprite");		
 		
-		
+		botonBon = new Sprite(juego.getWidth()-60,10,40,40,0,0,imagenBonificacion,true,true,"botonBon");
 	}
 
 	@Override
@@ -93,6 +95,9 @@ public class PantallaTienda implements Pantalla {
 	pTortuga.pintarEnMundo(g);
 	
 	dineroSprite.pintarEnMundo(g);
+	
+	botonBon.pintarEnMundo(g);
+	botonBon.pintarBuffer(imagenBonificacion, true);
 
 	g.setFont(fuentePeces);
 	g.drawString(Integer.toString(dinero), 60, juego.getHeight() - 30);
@@ -106,35 +111,25 @@ public class PantallaTienda implements Pantalla {
 
 	@Override
 	public void pulsarRaton(MouseEvent e) {
-		if (cerrar.enBoton) {
-			juego.pantallaEjecucion = pecera;
+		if(spriteEnFocus!=null) {
+		switch(spriteEnFocus.nombre) {
+		case "cerrar": cerrarVentana(e);
+			break;
+		case "botonComprarPayaso": comprarPez(e);
+		break;
+		case "botonComprarTortuga": comprarTortuga(e);
+		break;
+		case "botonComprarTiburon": comprarTiburon(e);
+		break;
+		case "botonBon": abrirBonificacion(e);
+		break;
 			
 		}
-		if(botonComprarPayaso.enBoton) {
-			if(pecera.dineroValor>=120) {
-			pecera.nuevoPez=true;
-			pecera.tipoPez = 1;
-			pecera.dineroValor-=120;
-			juego.pantallaEjecucion = pecera;
-			}
-		}
-		if(botonComprarTortuga.enBoton) {
-			if(pecera.dineroValor>=600) {
-			pecera.nuevoPez=true;
-			pecera.tipoPez=2;
-			pecera.dineroValor-=600;
-			juego.pantallaEjecucion = pecera;
-			}
 		}
 		
-		if(botonComprarTiburon.enBoton) {
-			if(pecera.dineroValor>=2500) {
-			pecera.nuevoPez=true;
-			pecera.tipoPez=3;
-			pecera.dineroValor-=2500;
-			juego.pantallaEjecucion = pecera;
-			}
-		}
+		
+		
+		
 
 	}
 
@@ -145,6 +140,7 @@ public class PantallaTienda implements Pantalla {
 		comprobarBoton(e, botonComprarPayaso, true,2);
 		comprobarBoton(e, botonComprarTortuga, true, 2);
 		comprobarBoton(e, botonComprarTiburon, true, 2);
+		comprobarBoton(e, botonBon, true, 1);
 	}
 
 	@Override
@@ -174,7 +170,7 @@ public class PantallaTienda implements Pantalla {
 		if (raton.getX() >= sprite.getPosX() && raton.getX() <= sprite.getPosX() + sprite.ancho
 				&& raton.getY() >= sprite.getPosY() && raton.getY() <= sprite.getPosY() + sprite.alto) {
 
-			
+			spriteEnFocus = sprite;
 			sprite.enBoton = true;
 			if (efecto) {
 				switch(diseño) {
@@ -207,6 +203,47 @@ public class PantallaTienda implements Pantalla {
 	
 	public void rellenarFondo(Graphics g) {
 		g.drawImage(fondoEscalado, 0, 0, null);
+	}
+	
+	public void cerrarVentana(MouseEvent e) {
+		juego.pantallaEjecucion = pecera;
+	}
+	
+	public void comprarPez(MouseEvent e) {
+		if(botonComprarPayaso.enBoton) {
+			if(pecera.dineroValor>=120) {
+			pecera.nuevoPez=true;
+			pecera.tipoPez = 1;
+			pecera.dineroValor-=120;
+			juego.pantallaEjecucion = pecera;
+			}
+		}
+	}
+	
+	public void comprarTortuga(MouseEvent e) {
+		if(botonComprarTortuga.enBoton) {
+			if(pecera.dineroValor>=600) {
+			pecera.nuevoPez=true;
+			pecera.tipoPez=2;
+			pecera.dineroValor-=600;
+			juego.pantallaEjecucion = pecera;
+			}
+		}
+	}
+	
+	public void comprarTiburon(MouseEvent e) {
+		if(botonComprarTiburon.enBoton) {
+			if(pecera.dineroValor>=2500) {
+			pecera.nuevoPez=true;
+			pecera.tipoPez=3;
+			pecera.dineroValor-=2500;
+			juego.pantallaEjecucion = pecera;
+			}
+		}
+	}
+	
+	public void abrirBonificacion(MouseEvent e) {
+		juego.pantallaEjecucion = new PantallaBonificaciones(pecera, juego, ventana, dinero);
 	}
 
 }
