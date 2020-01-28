@@ -213,21 +213,41 @@ public class PantallaBonificaciones implements Pantalla {
 		}else if(pecera.dineroInvertido>= 100 && pecera.dineroInvertido<500) {
 			barra = new Sprite(0, 100, 800, 300, 0, 0, imagenBarra1, true, true, "barra1");
 			barra.pintarEnMundo(g);
+			pecera.dec1=true;
 		}else if(pecera.dineroInvertido>= 500 && pecera.dineroInvertido<1000) {
 			barra = new Sprite(0, 100, 800, 300, 0, 0, imagenBarra2, true, true, "barra2");
 			barra.pintarEnMundo(g);
+			pecera.dec1=true;
+			pecera.dec2=true;
 		}else if(pecera.dineroInvertido>= 1000 && pecera.dineroInvertido<5000) {
 			barra = new Sprite(0, 100, 800, 300, 0, 0, imagenBarra3, true, true, "barra3");
 			barra.pintarEnMundo(g);
+			pecera.dec1=true;
+			pecera.dec2=true;
+			pecera.generarDinero=true;
 		}else if(pecera.dineroInvertido>= 5000 && pecera.dineroInvertido<=10000) {
 			barra = new Sprite(0, 100, 800, 300, 0, 0, imagenBarra4, true, true, "barra4");
 			barra.pintarEnMundo(g);
+			pecera.dec1=true;
+			pecera.dec2=true;
+			pecera.generarDinero=true;
+			pecera.imagenes=true;
 		}else if(pecera.dineroInvertido>= 10000 && pecera.dineroInvertido<=15000) {
 			barra = new Sprite(0, 100, 800, 300, 0, 0, imagenBarra5, true, true, "barra5");
 			barra.pintarEnMundo(g);
+			pecera.dec1=true;
+			pecera.dec2=true;
+			pecera.generarDinero=true;
+			pecera.imagenes=true;
+			pecera.musicas=true;
 		}else if(pecera.dineroInvertido>= 15000) {
 			barra = new Sprite(0, 100, 800, 300, 0, 0, imagenBarra6, true, true, "barra6");
 			barra.pintarEnMundo(g);
+			pecera.dec1=true;
+			pecera.dec2=true;
+			pecera.generarDinero=true;
+			pecera.imagenes=true;
+			pecera.musicas=true;
 		}
 		
 	}

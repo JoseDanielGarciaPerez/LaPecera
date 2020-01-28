@@ -12,6 +12,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class PantallaJuego implements Pantalla, Serializable {
 
@@ -32,15 +39,16 @@ public class PantallaJuego implements Pantalla, Serializable {
 			imagenBurbuja, imagenConcha, imagenBienvenida, imagenDone, imagenTexto, imagenMuerto, imagenTienda,
 			imagenNuevoPayaso, imagenNuevoTortuga, imagenNuevoTiburon, imagenTortugaIzquierda, imagenTortugaDerecha,
 			imagenTiburonIzquierda, imagenTiburonDerecha, imagenTortugaMuerta, imagenTiburonMuerto, imagenMoneda,
-			imagenMenuVenta, imagenMenuRep;
+			imagenMenuVenta, imagenMenuRep,	imagenDec1,imagenDec2,imagenImagen,fondoCargado,imagenMusica;
+		
 	private Sprite comida, cerrar, agarrar, bienvenida, cerrarVentana, texto, tienda, dineroSprite, nuevoPayaso,
-			nuevoTortuga, nuevoTiburon, menuVenta, cerrarMenu, menuRep;
+			nuevoTortuga, nuevoTiburon, menuVenta, cerrarMenu, menuRep,spriteDec1,spriteDec2,spriteImagen,spriteMusica;
 	private boolean darComida = false;
 	private boolean escribiendo = false;
-
+	
 	private boolean sinSeleccionarPrimero = false;
 	private boolean sinSeleccionarSegundo = false;
-
+	boolean dec1,dec2,generarDinero,imagenes,musicas;
 	int valorX, valorY;
 	private VentanaPrincipal ventana;
 	boolean partidaInicida;
@@ -50,14 +58,18 @@ public class PantallaJuego implements Pantalla, Serializable {
 	private double tiempoInicial = 0;
 	private double contadorTiempo = 0;
 	String cadena = "";
+	String rutaFondo="./Imagenes/fondo.jpg";
+	String rutaMusica ="./Musica/aquario.wav";
 	int primer = -1;
 	int segundo = -1;
 	private int ultClickado = 0;
 	final Font fuenteNombre = new Font("", Font.BOLD, 60);
 	final Font fuentePeces = new Font("", Font.BOLD, 18);
 	Partida partida;
-
+	double referenciaTiempo = 0;
+	double tiempoTranscurrido =0;
 	Sprite spriteEnFocus;
+	Clip sonido;
 
 	public PantallaJuego(PanelJuego juego, VentanaPrincipal ventana, int dinero) {
 		this.ventana = ventana;
@@ -74,7 +86,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 		try {
 			imagenPezIzquierda = ImageIO.read(new File("./Imagenes/pez-izquierda.png"));
 			imagenPezDerecha = ImageIO.read(new File("./Imagenes/pez-derecha.png"));
-			fondo = ImageIO.read(new File("./Imagenes/fondo.jpg"));
+			
 			imagenGalleta = ImageIO.read(new File("Imagenes/galleta.png"));
 			imagenComida = ImageIO.read(new File("Imagenes/comida.png"));
 			imagenCerrar = ImageIO.read(new File("Imagenes/cerrar.png"));
@@ -97,10 +109,17 @@ public class PantallaJuego implements Pantalla, Serializable {
 			imagenMoneda = ImageIO.read(new File("Imagenes/moneda.png"));
 			imagenMenuVenta = ImageIO.read(new File("Imagenes/menuVenta.png"));
 			imagenMenuRep = ImageIO.read(new File("Imagenes/menuRep.png"));
+			imagenDec1 = ImageIO.read(new File("Imagenes/dec1.png"));
+			imagenDec2 = ImageIO.read(new File("Imagenes/dec2.png"));
+			imagenImagen = ImageIO.read(new File("Imagenes/imagen.png"));
+			imagenMusica = ImageIO.read(new File("Imagenes/musica.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
+		
 
 		comida = new Sprite(juego.getWidth() - 60, juego.getHeight() - juego.getHeight() + 20, 40, 40, 0, 0,
 				imagenComida, false, true, "comida");
@@ -114,8 +133,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 		bienvenida = new Sprite(0, 0, 800, 500, 0, 0, imagenBienvenida, true, true, "bienvenida");
 
 		texto = new Sprite(300, 310, 400, 100, 0, 0, imagenTexto, true, true, "texto");
-		fondoEscalado = fondo.getScaledInstance(this.juego.getWidth(), this.juego.getHeight(),
-				BufferedImage.SCALE_SMOOTH);
+		
 
 		cerrarVentana = new Sprite(700, 420, 50, 50, 0, 0, imagenDone, true, true, "cerrarVentana");
 
@@ -131,12 +149,27 @@ public class PantallaJuego implements Pantalla, Serializable {
 		cerrarMenu = new Sprite(30, juego.getHeight() - 100, 40, 40, 0, 0, imagenCerrar, true, false, "cerrarMenu");
 
 		menuRep = new Sprite(200, juego.getHeight() - 100, 100, 100, 0, 0, imagenMenuRep, true, false, "menuRep");
+		
+		spriteDec1 = new Sprite(0,100,400,400,0,0,imagenDec1,true,true,"dec1");
+		
+		spriteDec2 = new Sprite(600,400,100,100,0,0,imagenDec2,true,true,"dec2");
+		
+		spriteImagen = new Sprite(740,460,40,40,0,0,imagenImagen,true,false,"spriteImagen");
+		
+		spriteMusica = new Sprite(740,300,40,40,0,0,imagenMusica,true,false,"spriteMusica");
 		if (partida == null) {
 			nuevoPez = true;
 		} else {
 			nuevoPez = false;
 			dineroValor = partida.getDinero();
 			dineroInvertido = partida.getDineroInvertido();
+			dec1=partida.isDec1();
+			dec2=partida.isDec2();
+			generarDinero=partida.isGenerarDinero();
+			imagenes = partida.isPonerImagenes();
+			musicas = partida.isPonerMusica();
+			rutaMusica = partida.getRutaMusica();
+			rutaFondo = partida.getRutaFondo();
 			for (int i = 0; i < partida.getPeces(); i++) {
 				switch (partida.getTipos().get(i)) {
 				case 1:
@@ -163,12 +196,42 @@ public class PantallaJuego implements Pantalla, Serializable {
 			}
 
 		}
+		try {
+			fondo = ImageIO.read(new File(rutaFondo));
+			fondoEscalado = fondo.getScaledInstance(this.juego.getWidth(), this.juego.getHeight(),
+					BufferedImage.SCALE_SMOOTH);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		sonido = getSound(rutaMusica);
 
 	}
 
 	@Override
 	public void pintarPantalla(Graphics g) {
 		rellenarFondo(g);
+		if(dec1) {
+			spriteDec1.pintarEnMundo(g);
+		}
+		
+		if(dec2) {
+			
+			spriteDec2.pintarEnMundo(g);
+		}
+		
+		if(imagenes) {
+			spriteImagen.pintarEnMundo(g);
+			spriteImagen.visible=true;
+			spriteImagen.pintarBuffer(imagenImagen, true);
+		}
+		
+		if(musicas) {
+			spriteMusica.pintarEnMundo(g);
+			spriteMusica.visible=true;
+			spriteMusica.pintarBuffer(imagenMusica, true);
+		}
 		if (nuevoPez == false) {
 			for (int i = 0; i < peces.size(); i++) {
 
@@ -250,6 +313,15 @@ public class PantallaJuego implements Pantalla, Serializable {
 					burbujas.remove(i);
 			}
 		}
+		
+		if(generarDinero) {
+			contadorTiempo();
+		}
+		
+	
+		if(!sonido.isRunning()) {
+			playSound(sonido);
+		}
 	}
 
 	@Override
@@ -276,6 +348,12 @@ public class PantallaJuego implements Pantalla, Serializable {
 					break;
 				case "menuRep":
 					menuRep(e);
+					break;
+				case "spriteImagen":
+					buscarImagenes();
+					break;
+				case "spriteMusica":
+					buscarMusica();
 					break;
 				}
 			}
@@ -317,6 +395,8 @@ public class PantallaJuego implements Pantalla, Serializable {
 
 	}
 
+	
+
 	@Override
 	public void moverRaton(MouseEvent e) {
 		for (int i = 0; i < peces.size(); i++) {
@@ -339,6 +419,8 @@ public class PantallaJuego implements Pantalla, Serializable {
 		comprobarBoton(e, menuVenta, false);
 		comprobarBoton(e, cerrarMenu, true);
 		comprobarBoton(e, menuRep, false);
+		comprobarBoton(e, spriteImagen, true);
+		comprobarBoton(e, spriteMusica, true);
 	}
 
 	@Override
@@ -457,6 +539,13 @@ public class PantallaJuego implements Pantalla, Serializable {
 			partida.setEstadisticas(peces.get(i).salud);
 			partida.setTipos(peces.get(i).tipo);
 			partida.setDineroInvertido(dineroInvertido);
+			partida.setDec1(dec1);
+			partida.setDec2(dec2);
+			partida.setGenerarDinero(generarDinero);
+			partida.setPonerImagenes(imagenes);
+			partida.setPonerMusica(musicas);
+			partida.setRutaFondo(rutaFondo);
+			partida.setRutaMusica(rutaMusica);
 		}
 		
 		Datos.guardarDatos(partida);
@@ -651,6 +740,115 @@ public class PantallaJuego implements Pantalla, Serializable {
 				escribiendo = true;
 			}
 		}
+	}
+	
+	public void contadorTiempo() {
+		tiempoTranscurrido=System.nanoTime();
+		
+		if(tiempoTranscurrido-referenciaTiempo >= 6e+10) {
+			dineroValor+=100;
+			
+			referenciaTiempo=System.nanoTime();
+			
+	}
+	}
+	public void buscarImagenes() {
+		JFileChooser fileChooser = new JFileChooser();
+	    fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+	    
+	    FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("JPG Images", "jpg"); 
+	    fileChooser.setFileFilter(imgFilter);
+
+	    int result = fileChooser.showOpenDialog(null);
+
+	    if (result != JFileChooser.CANCEL_OPTION) {
+
+	        File fileName = fileChooser.getSelectedFile();
+
+	        if ((fileName == null) || (fileName.getName().equals(""))) {
+	           
+	        } else {
+	           try {
+				fondoCargado = ImageIO.read(new File(fileName.getAbsolutePath()));
+					rutaFondo= fileName.getAbsolutePath();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	           fondoEscalado = fondoCargado.getScaledInstance(this.juego.getWidth(), this.juego.getHeight(),
+	   				BufferedImage.SCALE_SMOOTH);
+
+	        }
+	    }
+	}
+	
+	public Clip getSound(String file) {
+		try {
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(file));
+
+			AudioFormat format = audioInputStream.getFormat();
+
+			DataLine.Info info = new DataLine.Info(Clip.class, format);
+
+			Clip sound;
+
+			sound = (Clip) AudioSystem.getLine(info);
+			sound.open(audioInputStream);
+			return sound;
+		}
+
+		catch (Exception e)
+
+		{
+
+			return null;
+
+		}
+
+	}
+	/**
+	 * Metodo para reproductir un fichero de sonido, se le pasa el fichero
+	 * @param clip objeto con el sonido almacenado
+	 */
+	public static void playSound(Clip clip)
+
+	{
+
+		clip.stop();
+
+		clip.setFramePosition(0);
+
+		clip.start();
+
+	}
+	
+	private void buscarMusica() {
+		JFileChooser fileChooser = new JFileChooser();
+	    fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+	    
+	    FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("WAV FILES", "wav"); 
+	    fileChooser.setFileFilter(imgFilter);
+
+	    int result = fileChooser.showOpenDialog(null);
+
+	    if (result != JFileChooser.CANCEL_OPTION) {
+
+	        File fileName = fileChooser.getSelectedFile();
+
+	        if ((fileName == null) || (fileName.getName().equals(""))) {
+	           
+	        } else {
+	        	sonido.stop();
+	        	sonido.close();
+				sonido = getSound(fileName.getAbsolutePath());
+				playSound(sonido);
+					rutaMusica= fileName.getAbsolutePath();
+			
+	          
+
+	        }
+	    }
+		
 	}
 
 }

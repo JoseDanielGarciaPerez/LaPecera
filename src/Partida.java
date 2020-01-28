@@ -10,6 +10,13 @@ public class Partida implements Serializable{
 	private ArrayList<Integer> tipos = new ArrayList<Integer>();
 	private int dinero = 0;
 	private int dineroInvertido=0;
+	private boolean dec1=false;
+	private boolean dec2=false;
+	private boolean generarDinero=false;
+	private boolean ponerImagenes = false;
+	private boolean ponerMusica = false;
+	private String rutaFondo = "./Imagenes/fondo.jpg";
+	private String rutaMusica = "./Musica/aquario.wav";
 	
 	public int getPeces() {
 		return peces;
@@ -56,5 +63,47 @@ public class Partida implements Serializable{
 	}
 	public void setDineroInvertido(int dineroInvertido) {
 		this.dineroInvertido = dineroInvertido;
+	}
+	public boolean isDec1() {
+		return dec1;
+	}
+	public void setDec1(boolean dec1) {
+		this.dec1 = dec1;
+	}
+	public boolean isDec2() {
+		return dec2;
+	}
+	public void setDec2(boolean dec2) {
+		this.dec2 = dec2;
+	}
+	public boolean isGenerarDinero() {
+		return generarDinero;
+	}
+	public void setGenerarDinero(boolean generarDinero) {
+		this.generarDinero = generarDinero;
+	}
+	public boolean isPonerImagenes() {
+		return ponerImagenes;
+	}
+	public void setPonerImagenes(boolean ponerImagenes) {
+		this.ponerImagenes = ponerImagenes;
+	}
+	public String getRutaFondo() {
+		return rutaFondo;
+	}
+	public void setRutaFondo(String rutaFondo) {
+		this.rutaFondo = rutaFondo;
+	}
+	public String getRutaMusica() {
+		return rutaMusica;
+	}
+	public void setRutaMusica(String rutaMusica) {
+		this.rutaMusica = rutaMusica;
+	}
+	public boolean isPonerMusica() {
+		return ponerMusica;
+	}
+	public void setPonerMusica(boolean ponerMusica) {
+		this.ponerMusica = ponerMusica;
 	}
 }
