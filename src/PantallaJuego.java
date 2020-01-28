@@ -725,6 +725,7 @@ public class PantallaJuego implements Pantalla, Serializable {
 		if (cerrarVentana.enBoton && cadena.length() > 0) {
 			crearPez();
 			cadena = "";
+			escribiendo=false;
 			bienvenida = null;
 			nuevoPez = false;
 

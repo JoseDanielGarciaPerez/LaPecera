@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 
 public class Pez implements Serializable{
 	/**
@@ -135,6 +136,58 @@ public class Pez implements Serializable{
 			}
 
 	}
+	
+	public void movimientoPezInicio(JFrame ventana) {
+		
+		
+		if(usadoMuerto==false) {
+		if(movimiento==false) {
+			movimiento=true;
+			
+		direccionX = (int) (Math.random() * ((ventana.getWidth()-this.ancho)+1));
+		
+		direccionY = (int) (Math.random() * ((ventana.getHeight()-this.alto)+1));
+		
+		}
+		
+		if(posX>direccionX) {
+			posX -=velX;
+			if(usadoIzquierda==false) {
+			pintarBuffer(imagenIzquierda, true);
+			usadoIzquierda=true;
+			usadoDerecha=false;
+			}
+			
+		}
+		if(posX<direccionX) {
+			posX+=velX;
+			if(usadoDerecha==false) {
+			pintarBuffer(imagenDerecha, true);
+			usadoDerecha=true;
+			usadoIzquierda=false;
+			}
+			
+			
+		}
+		if(posY>direccionY) {
+			
+			posY -=velY;
+		}
+		if(posY<direccionY) {
+			posY+=velY;
+		}
+		
+		if(posX == direccionX && posY == direccionY) {
+			movimiento=false;
+		}
+		
+			
+		}else {
+			if(posY>0)
+			posY-=1;
+		}
+
+}
 
 	public void pintarEnMundo(Graphics g) {
 		int posicionX =0;

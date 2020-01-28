@@ -81,7 +81,8 @@ public class PantallaBonificaciones implements Pantalla {
 		
 		g.setFont(fuentePeces);
 		g.drawString(Integer.toString(dinero), 60, juego.getHeight() - 30);
-		g.drawString(Integer.toString(pecera.dineroInvertido), 150, juego.getHeight() - 30);
+		g.setFont(fuentePeces);
+		g.drawString("Dinero Invertido: "+Integer.toString(pecera.dineroInvertido), 300, 200);
 	}
 
 	@Override
