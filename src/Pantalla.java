@@ -3,7 +3,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 /**
- * 
+ * La interface Pantalla nos proporciona los metodos necesarios y globales que usaremos en todas las pantallas de nuestro juego
  * @author José Daniel García Pérez
  *
  */

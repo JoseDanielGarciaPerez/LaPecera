@@ -7,13 +7,17 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
+/**
+ * La clase pantallaBonificaciones trata de una ventana donde tenemos una barra de progreso y una caja de texto en la que podemos donar, según vayamos donando se irá llenando la barra y desbloqueando mejores
+ * @author  José Daniel
+ *
+ */
 public class PantallaBonificaciones implements Pantalla {
 
 	PantallaJuego pecera;
 	PanelJuego juego;
 	VentanaPrincipal ventana;
-	int dinero;
+	
 	
 	BufferedImage imagenBarraVacia,imagenBarra1,imagenBarra2,imagenBarra3,imagenBarra4,imagenBarra5,imagenBarra6,imagenCerrar,imagenTexto,fondoEscalado,imagenDone,imagenMoneda;
 	String cadena="";
@@ -22,14 +26,16 @@ public class PantallaBonificaciones implements Pantalla {
 	final Font fuenteNombre = new Font("", Font.BOLD, 60);
 	final Font fuentePeces = new Font("", Font.BOLD, 18);
 	
-	public PantallaBonificaciones(PantallaJuego pecera,PanelJuego juego,VentanaPrincipal ventana,int dinero) {
+	public PantallaBonificaciones(PantallaJuego pecera,PanelJuego juego,VentanaPrincipal ventana) {
 		this.pecera=pecera;
 		this.ventana=ventana;
-		this.dinero=dinero;
+	
 		inicializarPantalla(juego);
 		
 	}
-	@Override
+	/**
+	 * Se encarga de cargar todas las imagenes y crear los Sprites necesarios
+	 */
 	public void inicializarPantalla(PanelJuego juego) {
 		this.juego=juego;
 		
@@ -63,7 +69,9 @@ public class PantallaBonificaciones implements Pantalla {
 		
 	}
 
-	@Override
+	/**
+	 * Pinta por pantalla todo lo necesario
+	 */
 	public void pintarPantalla(Graphics g) {
 		pintarFondo(g);
 		cerrar.pintarEnMundo(g);
@@ -80,8 +88,8 @@ public class PantallaBonificaciones implements Pantalla {
 		dineroSprite.pintarEnMundo(g);
 		
 		g.setFont(fuentePeces);
-		g.drawString(Integer.toString(dinero), 60, juego.getHeight() - 30);
-		g.setFont(fuentePeces);
+		g.drawString(Integer.toString(pecera.dineroValor), 60, juego.getHeight() - 30);
+		
 		g.drawString("Dinero Invertido: "+Integer.toString(pecera.dineroInvertido), 300, 200);
 	}
 
@@ -206,7 +214,10 @@ public class PantallaBonificaciones implements Pantalla {
 		g.setFont(fuenteNombre);
 		g.drawString(cadena, 240, 380);
 	}
-	
+	/**
+	 * El metodo pintarBarra se encarga de ir pintando la barra de progreso y desbloqueando las mejores dependiendo del dinero que vayamos ingresando
+	 * @param g
+	 */
 	public void pintarBarra(Graphics g){
 		if(pecera.dineroInvertido>=0 && pecera.dineroInvertido<100) {
 			barra = new Sprite(0, 100, 800, 300, 0, 0, imagenBarraVacia, true, true, "barraVacia");
@@ -252,7 +263,9 @@ public class PantallaBonificaciones implements Pantalla {
 		}
 		
 	}
-	
+	/**
+	 * Este metodo se encarga de añadir al diseñoInvertido lo que pongamos en la caja de texto, si disponemos de ese dinero, luego se encarga de descontarlo del dinero total
+	 */
 	public void aniadirFondos() {
 		if(botonAceptar.enBoton && cadena.length()>0) {
 		int dineroAInvertir = Integer.parseInt(cadena);
@@ -260,7 +273,7 @@ public class PantallaBonificaciones implements Pantalla {
 			
 		}else {
 		pecera.dineroValor-=dineroAInvertir;
-		dinero = pecera.dineroValor;
+		
 		pecera.dineroInvertido+=dineroAInvertir;
 		
 		cadena="";

@@ -1,11 +1,12 @@
 import java.awt.Color;
 
+
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
+
 
 import javax.imageio.ImageIO;
 
@@ -17,7 +18,8 @@ import javax.imageio.ImageIO;
  * @author jesusredondogarcia
  *
  */
-public class Sprite implements Serializable {
+public class Sprite  {
+	
 	protected String nombre;
 	protected int posX;
 	protected int posY;
@@ -130,7 +132,7 @@ public class Sprite implements Serializable {
 	}
 
 	/**
-	 * Actualiza la posiciÃ³n del Sprite para que siempre se mantega en el
+	 * Actualiza la posición del Sprite para que siempre se mantenga en el
 	 * panelJuego.
 	 * 
 	 * @param panelJuego
@@ -183,8 +185,7 @@ public class Sprite implements Serializable {
 	}
 
 	/**
-	 * Actualiza la posiciÃ³n teniendo en cuenta la velocidad. No tiene en cuenta
-	 * mÃ¡rgenes de pantalla.
+	 * Actualiza la posición teniendo en cuenta la velocidad. Cuando llega al margen inferior se mantiene ahí
 	 */
 	public void aplicarVelocidadComida(PanelJuego juego) {
 		if(posY<juego.getHeight()-8)
@@ -192,7 +193,10 @@ public class Sprite implements Serializable {
 			
 			
 	}
-	
+	/**
+	 * Metodo que aplica la velocidad hacía arriba
+	 * @param juego
+	 */
 	public void aplicarVelocidadBrbuja(PanelJuego juego) {
 		
 			posY = posY - velY;
@@ -205,83 +209,6 @@ public class Sprite implements Serializable {
 	
 	
 	
-	public void movimientoPez(PanelJuego panelJuego) {
-		if(comida==false) {
-		int valor = (int)(Math.random()*(1-500)+500);
-		
-		if(valor == MOVERSE) {
-			
-			int direccionX = (int)(Math.random()*(0-2)+2);
-			int direccionY = (int)(Math.random()*(0-2)+2);
-//			System.out.println(direccionX);
-//			System.out.println(direccionY);
-			
-			if(direccionX == 0) {
-				for (int i = 0; i < 5; i++) {
-					
-				
-				
-				if (posX + ancho >= panelJuego.getWidth()) { // Si te vas por la derecha!
-					velX = -Math.abs(velX);
-				}
-				if (posX < 0) {
-					velX = Math.abs(velX);
-				}
-
-				posX = posX + velX;
-				}
-			}else {
-				for (int i = 0; i < 5; i++) {
-				
-				if (posX + ancho >= panelJuego.getWidth()) { // Si te vas por la derecha!
-					velX = -Math.abs(velX);
-				}
-				if (posX < 0) {
-					velX = Math.abs(velX);
-				}
-
-				
-
-				posX = posX - velX;
-				}
-			}
-			
-			if(direccionY == 0) {
-				for (int i = 0; i < 5; i++) {
-				// Eje vertical:
-				if (posY + alto >= panelJuego.getHeight()) { // Si te vas por abajo!!
-					velY = -Math.abs(velY);
-				}
-				if (posY < 0) {
-					velY = Math.abs(velY);
-					
-					
-					
-					
-				}
-				posY = posY + velY;
-				}
-				
-			}else {
-				// Eje vertical:
-				for (int i = 0; i < 5; i++) {
-				if (posY + alto >= panelJuego.getHeight()) { // Si te vas por abajo!!
-					velY = Math.abs(velY);
-				}
-				if (posY < 0) {
-					velY = -Math.abs(velY);
-					
-					
-					
-				}
-				posY = posY - velY;
-				}
-			}
-			
-		
-		}
-		}
-	}
 
 	/** GETTERS && SETTERS **/
 
